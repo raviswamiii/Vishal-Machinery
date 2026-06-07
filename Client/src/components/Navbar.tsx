@@ -22,8 +22,8 @@ export const Navbar = () => {
           alt="Vishal Machinery Logo"
         />
         <div>
-          <h1 className="text-xl font-bold montserrat h-6">VISHAL</h1>
-          <p className="text-[8px] tracking-[0.2em] montserrat">MACHINERY</p>
+          <h1 className="text-2xl tracking-widest bold-bebas-neue h-6">VISHAL</h1>
+          <p className="text-[10px] tracking-[0.2em] bebas-neue">MACHINERY</p>
         </div>
       </div>
 
@@ -45,9 +45,9 @@ export const Navbar = () => {
       <div className="flex items-center gap-4">
 
         {/* Sign Up Button */}
-        <button className="flex bg-yellow-400 rounded-sm items-center gap-1 md:gap-2 px-2 md:px-4 py-1 md:py-2 cursor-pointer">
-          <PiUserCirclePlusLight className="md:text-xl" />
-          <span className="text-sm font-bold">SIGN UP</span>
+        <button className="flex bg-yellow-400 rounded-sm justify-center items-center gap-2 px-3 md:px-4 py-1 md:py-2 cursor-pointer">
+          <PiUserCirclePlusLight className="text-lg md:text-xl" />
+          <span className="text-xs font-bold montserrat">SIGN UP</span>
         </button>
 
         {/* Mobile Hamburger Menu Button */}
