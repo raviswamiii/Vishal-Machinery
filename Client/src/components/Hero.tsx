@@ -7,7 +7,7 @@ import { RiCameraLensFill } from "react-icons/ri";
 
 export const Hero = () => {
   return (
-    <div className="h-screen flex-1 overflow-hidden bg-black relative">
+    <div className="h-full overflow-hidden bg-black relative">
       <img
         className="absolute -right-25"
         src={packagingMachine}
