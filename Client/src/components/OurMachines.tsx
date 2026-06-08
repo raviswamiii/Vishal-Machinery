@@ -1,14 +1,15 @@
 import PackagingMachine from "../assets/Products/PackagingMachine.png";
 import { GoArrowRight } from "react-icons/go";
 
+const products = [1, 2, 3];
+
 export const OurMachines = () => {
-  const products = [1, 2, 3];
   return (
     <div className="min-h-screen flex flex-col gap-8 p-4">
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 pt-6">
         <div className="flex items-center gap-2">
-          <p className="text-yellow-400 text-xl font-semibold montserrat h-8.5">
-            Our Machines
+          <p className="text-yellow-400 text-md font-semibold montserrat">
+            OUR MACHINES
           </p>
           <p className="bg-yellow-400 h-0.5 w-10"></p>
         </div>
@@ -48,7 +49,6 @@ export const OurMachines = () => {
       <button className="montserrat border border-gray-600 font-bold text-sm py-4 rounded-sm">
         VIEW ALL MACHINES
         <GoArrowRight className="text-lg inline-block ml-4" />
-
       </button>
     </div>
   );
