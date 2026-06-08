@@ -1,10 +1,55 @@
+import PackagingMachine from "../assets/Products/PackagingMachine.png";
+import { GoArrowRight } from "react-icons/go";
 
 export const OurMachines = () => {
+  const products = [1, 2, 3];
   return (
-    <div>
-        <p>Our Machines</p>
-        <h1>Engineered for every Packaging need</h1>
-        <p>From granules to powder, liquids to solids - Our machines deliver consistent performance across multiple industries.</p>
+    <div className="min-h-screen flex flex-col gap-8 p-4">
+      <div className="flex flex-col gap-3">
+        <div className="flex items-center gap-2">
+          <p className="text-yellow-400 text-xl font-semibold montserrat h-8.5">
+            Our Machines
+          </p>
+          <p className="bg-yellow-400 h-0.5 w-10"></p>
+        </div>
+
+        <h1 className="text-2xl font-bold montserrat">
+          Engineered for every <br /> Packaging need
+        </h1>
+        <p className="text-sm text-gray-800">
+          From granules to powder, liquids to solids - Our machines deliver
+          consistent performance across multiple industries.
+        </p>
+      </div>
+
+      {products.map((_, index) => (
+        <div key={index} className="flex items-center rounded-xl shadow-lg">
+          <img
+            className="h-55"
+            src={PackagingMachine}
+            alt="Packaging Machines"
+          />
+          <div className="">
+            <h1 className="text-md font-bold montserrat mb-2">
+              SEMI AUTOMATIC POUCH PACKING MACHINE
+            </h1>
+            <p className="text-sm text-gray-800 mb-2">
+              Cost-effective and efficient solution for small to medium
+              production.
+            </p>
+            <button className="text-yellow-400 text-sm montserrat font-semibold">
+              VIEW DETAILS
+              <GoArrowRight className="text-lg inline-block ml-4" />
+            </button>
+          </div>
+        </div>
+      ))}
+
+      <button className="montserrat border border-gray-600 font-bold text-sm py-4 rounded-sm">
+        VIEW ALL MACHINES
+        <GoArrowRight className="text-lg inline-block ml-4" />
+
+      </button>
     </div>
-  )
-}
+  );
+};

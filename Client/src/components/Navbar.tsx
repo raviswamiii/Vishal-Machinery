@@ -12,7 +12,7 @@ const navItems = [
 
 export const Navbar = () => {
   return (
-    <div className="bg-white flex justify-between items-center p-2 md:px-10">
+    <div className="h-15 bg-white flex justify-between items-center p-2 md:px-10">
         
       {/* Brand Logo */}
       <div className="flex items-center gap-2">
@@ -28,7 +28,7 @@ export const Navbar = () => {
       </div>
 
       {/* Desktop Navigation */}
-      <nav className="hidden montserrat text-sm font-bold md:flex justify-between w-[50%]">
+      <div className="hidden montserrat text-sm font-bold md:flex justify-between w-[50%]">
         {navItems.map((item) => (
           <NavLink
             key={item.path}
@@ -39,7 +39,7 @@ export const Navbar = () => {
             <hr className="w-2/4 border-none h-[1.5px] bg-yellow-400 hidden" />
           </NavLink>
         ))}
-      </nav>
+      </div>
 
       {/* Sign Up Button and Mobile Menu */}
       <div className="flex items-center gap-4">

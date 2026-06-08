@@ -1,4 +1,4 @@
-import packagingMachine from "../assets/heroImage/PackagingMachin.png";
+import packagingMachine from "../assets/heroImage/PackagingMachine.png";
 import { CiSettings } from "react-icons/ci";
 import { MdOutlineSecurity } from "react-icons/md";
 import { GrSuse } from "react-icons/gr";
@@ -7,7 +7,7 @@ import { RiCameraLensFill } from "react-icons/ri";
 
 export const Hero = () => {
   return (
-    <div className="h-full overflow-hidden bg-black relative">
+    <div className="h-[calc(100vh-60px)] overflow-hidden bg-black relative">
       <img
         className="absolute -right-25"
         src={packagingMachine}
