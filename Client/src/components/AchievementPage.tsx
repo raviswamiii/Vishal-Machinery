@@ -12,7 +12,7 @@ const achievementData = [
 
 export const AchievementPage = () => {
   return (
-    <div className="flex flex-col gap-4 border border-red-900 p-4">
+    <div className="flex flex-col gap-4 p-4">
       {achievementData.map((achievement, index) => (
         <div
           key={index}

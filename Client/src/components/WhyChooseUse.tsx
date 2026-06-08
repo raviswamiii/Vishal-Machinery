@@ -28,8 +28,8 @@ const reasons = [
 
 export const WhyChooseUse = () => {
   return (
-    <div className="min-h-screen flex flex-col gap-8 bg-black p-4">
-      <div className="flex flex-col gap-3 pt-6">
+    <div className="min-h-screen flex flex-col gap-8 bg-black px-4 py-10">
+      <div className="flex flex-col gap-3">
         <div className="flex items-center gap-2">
           <p className="text-yellow-400 text-md font-semibold montserrat">
             WHY CHOOSE US
