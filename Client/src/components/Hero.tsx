@@ -9,13 +9,13 @@ export const Hero = () => {
   return (
     <div className="h-[calc(100vh-60px)] overflow-hidden bg-black relative">
       <img
-        className="absolute -right-25"
+        className="absolute -right-25 sm:-right-45 sm:-top-5 sm:h-full sm:w-full sm:object-contain"
         src={packagingMachine}
         alt="Packaging Machine"
       />
 
-      <div className="flex flex-col gap-4 px-4 w-[60%] text-white absolute top-20">
-        <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-4 sm:gap-5 px-4 sm:px-10 w-[60%] sm:w-[55%] text-white absolute top-20">
+        <div className="flex flex-col gap-2 sm:gap-3">
           <p className="font-semibold bg-linear-to-r from-yellow-300 via-yellow-500 to-amber-700 bg-clip-text text-transparent">
             BUILD FOR PRECISION.
           </p>
@@ -31,7 +31,7 @@ export const Hero = () => {
           and unmatched efficiency.
         </p>
 
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 sm:gap-5">
           <button className="bg-yellow-400 text-black text-xs font-extrabold rounded-sm flex justify-center items-center gap-2 py-4">
             <RiCameraLensFill className="text-xl" />
             <span>EXPLORE MACHINES</span>
@@ -44,17 +44,18 @@ export const Hero = () => {
         </div>
       </div>
 
-      <div className="text-white absolute bottom-0 flex text-xs border-t border-white/30 py-8">
-        <div className="border-r border-white/30 flex gap-2 px-2">
+      <div className="text-white bg-black w-full absolute bottom-0 flex justify-center text-xs sm:text-sm border-t border-white/30 py-8 sm:px-4">
+        <div className="border-r border-white/30 flex items-center gap-2 px-2 sm:pl-5">
           <CiSettings className="text-4xl" />
           <p>PRECISION ENGINEERED</p>
         </div>
 
-        <div className="border-r border-white/30 flex gap-2 px-2">
+        <div className="border-r border-white/30 flex items-center gap-2 px-2 sm:pl-5">
           <MdOutlineSecurity className="text-4xl" />
           <p>DURABLE & RELIABLE</p>
         </div>
-        <div className="flex gap-2 px-2">
+
+        <div className="flex gap-2 items-center px-2 sm:pl-5">
           <GrSuse className="text-4xl" />
           <p>EASY TO USE & MAINTAIN</p>
         </div>
