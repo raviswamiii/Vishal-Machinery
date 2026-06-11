@@ -15,13 +15,13 @@ const bottomBar = [
 export const Hero = () => {
   return (
     <div className="h-[calc(100vh-60px)] bg-black">
-      <div className="h-[calc(100vh-140px)] absolute z-10 w-[50%] text-white pl-4 sm:pl-10 flex flex-col justify-center gap-4">
+      <div className="h-[calc(100vh-140px)] absolute z-10 w-[50%] text-white pl-[4vw] sm:pl-[8vw] flex flex-col justify-center gap-4">
         <div className="flex flex-col gap-2">
           <p className="font-semibold bg-linear-to-r from-yellow-300 via-yellow-500 to-amber-700 bg-clip-text text-transparent">
             BUILD FOR PRECISION.
           </p>
 
-          <h1 className="text-5xl sm:text-6xl font-semibold bebas-neue">
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-semibold bebas-neue">
             BUILD FOR <br />{" "}
             <span className="text-yellow-400">PERFORMANCE.</span>
           </h1>
@@ -33,12 +33,12 @@ export const Hero = () => {
         </p>
 
         <div className="flex flex-col gap-4">
-          <button className="bg-yellow-400 text-black text-xs font-extrabold rounded-sm flex justify-center items-center gap-2 py-4">
+          <button className="bg-yellow-400 text-black text-xs font-extrabold rounded-sm flex justify-center items-center gap-2 py-4 sm:w-[70%] md:w-[55%]">
             <RiCameraLensFill className="text-xl" />
             <span>EXPLORE MACHINES</span>
           </button>
 
-          <button className="bg-black text-white border border-gray-100 text-xs font-bold rounded-sm flex justify-center items-center gap-2 py-4">
+          <button className="bg-black text-white border border-gray-100 text-xs font-bold rounded-sm flex justify-center items-center gap-2 py-4 sm:w-[70%] md:w-[55%]">
             <MdOutlineSlowMotionVideo className="text-xl" />
             <span>WATCH VIDEO</span>
           </button>
@@ -52,7 +52,7 @@ export const Hero = () => {
           alt="Packaging Machine"
         />
         <img
-          className="h-full w-full object-cover absolute top-0 -right-30 sm:-right-35"
+          className="h-full w-full object-cover md:object-contain absolute top-0 -right-30 sm:-right-35 md:-right-45 lg:-right-55"
           src={PackagingMachine}
           alt="Packaging Machine"
         />
