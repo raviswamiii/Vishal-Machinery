@@ -26,10 +26,10 @@ const reasons = [
   },
 ];
 
-export const WhyChooseUse = () => {
+export const WhyChooseUs = () => {
   return (
-    <div className="min-h-screen flex flex-col gap-8 bg-black px-4 py-10">
-      <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-8 bg-black px-[4vw] sm:px-[8vw] py-10">
+      <div className="flex flex-col gap-3 md:w-[60%] lg:w-[50%] xl:w-[40%]">
         <div className="flex items-center gap-2">
           <p className="text-yellow-400 text-md font-semibold montserrat">
             WHY CHOOSE US
@@ -42,18 +42,22 @@ export const WhyChooseUse = () => {
         </h1>
         <p className="text-sm text-gray-300">
           We combine technology, precision and experience to deliver machines
-          that stand the best of time.
+          that stand the test of time.
         </p>
       </div>
 
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col md:flex-row gap-8">
         {reasons.map((reason, index) => (
-          <div key={index} className="flex items-center gap-4">
-            <div className="inline-flex items-center justify-center p-4 rounded-lg bg-zinc-900 border border-gray-700">
+          <div
+            key={index}
+            className="flex items-center md:block md:pr-[2vw] gap-4 md:border-r border-white/20 last:border-r-0"
+          >
+            <div className="inline-flex items-center justify-center p-4 md:mb-[4vh] rounded-lg bg-zinc-900 border border-gray-700">
               <reason.icon className="text-5xl text-yellow-600" />
             </div>
+
             <div>
-              <h1 className="text-md font-bold montserrat mb-1 text-white">
+              <h1 className="text-md font-bold montserrat mb-1 md:mb-[1vh] text-white">
                 {reason.title}
               </h1>
               <p className="text-gray-300 text-sm">{reason.description}</p>
