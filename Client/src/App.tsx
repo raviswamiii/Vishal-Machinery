@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import { Home } from "./pages/Home";
 import { Footer } from "./components/Footer";
+import { Machines } from "./pages/Machines";
 
 export const App = () => {
   return (
@@ -9,6 +10,7 @@ export const App = () => {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/machines" element={<Machines />} />
       </Routes>
       <Footer />
     </>
