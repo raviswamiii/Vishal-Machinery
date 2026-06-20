@@ -2,7 +2,6 @@ import FactoryImage from "../assets/CompanyImage/Factory Image.jpg";
 
 export const ContactHeroSection = () => {
   return (
-    <div className="">
       <div className="relative h-[calc(100vh-60px)]">
         <img
           className="absolute h-full w-full object-cover"
@@ -30,6 +29,5 @@ export const ContactHeroSection = () => {
           </p>
         </div>
       </div>
-    </div>
   );
 };
