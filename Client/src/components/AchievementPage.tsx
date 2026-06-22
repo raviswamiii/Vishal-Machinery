@@ -12,7 +12,7 @@ const achievementData = [
 
 export const AchievementPage = () => {
   return (
-    <div className="flex flex-col md:flex-row md:justify-between px-[4vw] sm:px-[8vw] md:py-10 h-full">
+    <div className="bg-[#F6FAEF] flex flex-col md:flex-row md:justify-between px-[4vw] sm:px-[8vw] md:py-10 h-full">
       {achievementData.map((achievement, index) => (
         <div
           key={index}

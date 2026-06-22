@@ -1,7 +1,7 @@
 import PackagingMachine from "../assets/Products/PackagingMachine.png";
 import { GoArrowRight } from "react-icons/go";
 
-const products = [1, 2, 3];
+const products = [1, 2, 3, 4, 5, 6];
 
 export const OurMachines = () => {
   return (
@@ -23,7 +23,7 @@ export const OurMachines = () => {
         </p>
       </div>
 
-      <div className=" flex flex-col md:flex-row gap-[2vw]">
+      <div className=" flex flex-col md:grid md:grid-cols-2 lg:grid-cols-3 gap-[2vw]">
         {products.map((_, index) => (
           <div
             key={index}
@@ -35,7 +35,7 @@ export const OurMachines = () => {
               alt="Packaging Machines"
             />
 
-            <div className="px-[2vw] md:pb-[2vw] lg:px-[4vw]">
+            <div className="px-[2vw] md:px-[4vw] md:pb-[2vw] ">
               <h1 className="text-md font-bold montserrat mb-2">
                 SEMI AUTOMATIC POUCH PACKING MACHINE
               </h1>

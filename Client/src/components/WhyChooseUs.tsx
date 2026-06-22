@@ -24,6 +24,27 @@ const reasons = [
     title: "CUSTOMIZED SOLUTIONS",
     description: "Tailored solutions to meet your unique packaging needs.",
   },
+  {
+    icon: RiBox3Fill,
+    title: "CUSTOMIZED SOLUTIONS",
+    description: "Tailored solutions to meet your unique packaging needs.",
+  },
+  {
+    icon: RiBox3Fill,
+    title: "CUSTOMIZED SOLUTIONS",
+    description: "Tailored solutions to meet your unique packaging needs.",
+  },
+  {
+    icon: RiBox3Fill,
+    title: "CUSTOMIZED SOLUTIONS",
+    description: "Tailored solutions to meet your unique packaging needs.",
+  },
+  {
+    icon: RiBox3Fill,
+    title: "CUSTOMIZED SOLUTIONS",
+    description: "Tailored solutions to meet your unique packaging needs.",
+  },
+  
 ];
 
 export const WhyChooseUs = () => {
@@ -46,11 +67,11 @@ export const WhyChooseUs = () => {
         </p>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-8">
+      <div className="flex flex-col md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:gap-x-8">
         {reasons.map((reason, index) => (
           <div
             key={index}
-            className="flex items-center md:block md:pr-[2vw] gap-4 md:border-r border-white/20 last:border-r-0"
+            className="flex items-center md:block md:pr-[2vw] gap-4 border-b border-white/20 py-4 sm:py-6 md:py-8"
           >
             <div className="inline-flex items-center justify-center p-4 md:mb-[4vh] rounded-lg bg-zinc-900 border border-gray-700">
               <reason.icon className="text-5xl text-yellow-600" />

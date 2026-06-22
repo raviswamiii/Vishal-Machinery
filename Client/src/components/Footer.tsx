@@ -1,50 +1,90 @@
 import { TfiHeadphoneAlt } from "react-icons/tfi";
 import { GoArrowRight } from "react-icons/go";
 import logo from "../assets/Logo/logo.png";
-import { FaFacebookF } from "react-icons/fa6";
-import { FaWhatsapp } from "react-icons/fa";
-import { FaInstagram } from "react-icons/fa6";
-import { FaLinkedinIn } from "react-icons/fa";
 import { MdOutlineCopyright } from "react-icons/md";
+import { Link } from "react-router-dom";
 
-const socialMediaIcons = [
-  { icon: FaFacebookF },
-  { icon: FaWhatsapp },
-  { icon: FaInstagram },
-  { icon: FaLinkedinIn },
-];
+// Defines the structure of each footer link item
+// path is optional because some items are only text currently
+type FooterItem = {
+  name: string;
+  path?: string;
+};
 
-const pages = [
-  { page: "HOME" },
-  { page: "MACHINES" },
-  { page: "ABOUT US" },
-  { page: "CONTACT" },
+// Defines each footer section with a title and multiple items
+type FooterSection = {
+  title: string;
+  items: FooterItem[];
+};
+
+// Footer navigation data
+// Keeping data separate from JSX makes adding/removing links easier
+const footerDetails: FooterSection[] = [
+  {
+    title: "QUICK LINKS",
+    items: [
+      { name: "Home", path: "/" },
+      { name: "Machines", path: "/machines" },
+      { name: "About Us", path: "/aboutUs" },
+      { name: "Contact", path: "/contact" },
+    ],
+  },
+  {
+    title: "OUR PRODUCTS",
+    items: [
+      { name: "Pouch Packaging Machine" },
+      { name: "Agarbatti Making Machine" },
+      { name: "Slipper Making Machine" },
+      { name: "Paper Cup Making Machine" },
+    ],
+  },
+  {
+    title: "SUPPORT",
+    items: [
+      { name: "FAQs" },
+      { name: "Warranty" },
+      { name: "Installation" },
+      { name: "Maintenance" },
+    ],
+  },
 ];
 
 export const Footer = () => {
   return (
-    <div className="relative">
-      <div className="bg-black min-h-screen text-white pt-10 px-[4vw] sm:px-[8vw]">
-        <div className="flex flex-col gap-6 border-b-[0.5px] border-gray-300/50 pb-6">
-          <div className="flex items-center gap-8">
-            <TfiHeadphoneAlt className="text-5xl text-yellow-500" />
-            <div>
-              <p className="text-md font-semibold montserrat">
-                NEED HELP CHOOSING THE RIGHT MACHINE?
-              </p>
-              <p className="text-sm text-gray-400">
-                Talk to our experts today.
-              </p>
+    <footer className=" bg-black">
+
+      {/* Main footer content container */}
+      <div className="text-white pt-10 flex flex-col gap-6 px-[4vw] sm:px-[8vw]">
+        
+        {/* Contact CTA section */}
+        <section className="border-b-[0.5px] border-gray-300/50">
+          <div className="flex flex-col gap-6 pb-6 sm:w-fit">
+            <div className="flex items-center gap-8">
+              <TfiHeadphoneAlt className="text-5xl text-yellow-500" />
+              <div>
+                <p className="text-md font-semibold montserrat">
+                  NEED HELP CHOOSING THE RIGHT MACHINE?
+                </p>
+                <p className="text-sm text-gray-400">
+                  Talk to our experts today.
+                </p>
+              </div>
             </div>
+
+            {/* Redirect user to contact page */}
+            <Link
+              to="/contact"
+              className="bg-yellow-400 flex items-center justify-center text-black text-sm font-bold py-4 rounded-lg montserrat w-full"
+            >
+              CONTACT US
+              <GoArrowRight className="ml-6 text-lg" />
+            </Link>
           </div>
+        </section>
 
-          <button className="bg-yellow-400 flex items-center justify-center text-black text-sm font-bold py-4 rounded-lg montserrat w-full">
-            CONTACT US
-            <GoArrowRight className="ml-6 text-lg" />
-          </button>
-        </div>
-
-        <div className="pt-6 flex flex-col gap-4">
+        {/* Company information and navigation */}
+        <section className="flex flex-col gap-4">
+          {/* Company logo and brand name */}
           <div className="flex items-center gap-2">
             <img
               className="h-10 w-auto rounded-full overflow-hidden"
@@ -52,45 +92,59 @@ export const Footer = () => {
               alt="Vishal Machinery Logo"
             />
             <div>
-              <h1 className="text-2xl tracking-widest bold-bebas-neue h-6">
+              <p className="text-2xl tracking-widest bold-bebas-neue h-6">
                 VISHAL
-              </h1>
+              </p>
               <p className="text-[10px] tracking-[0.2em] bebas-neue">
                 MACHINERY
               </p>
             </div>
           </div>
 
-          <p className="text-sm text-gray-400">
-            High performance packaging machines <br /> built for precision,
-            reliability and efficiency.
+          {/* Company description */}
+          <p className="text-sm text-gray-400 max-w-lg">
+            Delivering high-quality machinery solutions with reliability,
+            innovation and unmatched customer support.
           </p>
+        </section>
 
-          <div className="flex gap-4 mt-2">
-            {socialMediaIcons.map((socialMediaIcon, index) => (
-              <div key={index} className="border rounded-full p-3">
-                <socialMediaIcon.icon />
+        {/* Dynamic footer navigation sections */}
+        <section className="flex flex-col gap-8 sm:flex-row sm:justify-between">
+          {footerDetails.map((details, index) => (
+            <div key={index}>
+              {/* Footer section heading */}
+              <h3 className="montserrat text-sm font-semibold mb-4">
+                {details.title}
+              </h3>
+
+              {/* Footer links */}
+              <div className="flex flex-col gap-3">
+                {details.items.map((item, i) =>
+                  item.path ? (
+                    <Link
+                      key={i}
+                      to={item.path}
+                      className="text-sm text-gray-300 montserrat hover:text-white transition-colors duration-300"
+                    >
+                      {item.name}
+                    </Link>
+                  ) : (
+                    <p key={i} className="text-sm text-gray-300 montserrat">
+                      {item.name}
+                    </p>
+                  ),
+                )}
               </div>
-            ))}
-          </div>
-
-          <div>
-            {pages.map((page, index) => (
-              <p
-                key={index}
-                className="py-3 text-sm text-gray-300 font-semibold border-b-[0.5px] border-gray-300/50 montserrat"
-              >
-                {page.page}
-              </p>
-            ))}
-          </div>
-        </div>
+            </div>
+          ))}
+        </section>
       </div>
 
-      <div className="flex items-center text-xs gap-1 text-gray-500 justify-center absolute bottom-5 w-full">
+      {/* Copyright section */}
+      <section className="flex items-center gap-1 text-gray-500 justify-center w-full py-[4vh]">
         <MdOutlineCopyright />
-        <p>Vishal Machinery. All rights reserved.</p>
-      </div>
-    </div>
+        <small>Vishal Machinery. All rights reserved.</small>
+      </section>
+    </footer>
   );
 };

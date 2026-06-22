@@ -12,7 +12,7 @@ const navItems = [
 
 export const Navbar = () => {
   return (
-    <div className="h-15 bg-white flex justify-between items-center p-2 md:px-10">
+    <div className="h-15 bg-[#F6FAEF] flex justify-between items-center p-2 md:px-10">
         
       {/* Brand Logo */}
       <div className="flex items-center gap-2">
