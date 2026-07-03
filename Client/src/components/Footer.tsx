@@ -1,6 +1,6 @@
 import { TfiHeadphoneAlt } from "react-icons/tfi";
 import { GoArrowRight } from "react-icons/go";
-import logo from "../assets/Logo/logo.png";
+import logo from "../assets/Logo/Logo.png";
 import { MdOutlineCopyright } from "react-icons/md";
 import { Link } from "react-router-dom";
 
