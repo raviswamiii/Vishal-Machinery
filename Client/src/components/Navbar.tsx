@@ -1,5 +1,5 @@
 import { RiMenu3Fill } from "react-icons/ri";
-import logo from "../assets/Logo/logo.png";
+import logo from "../assets/Logo/Logo.png";
 import { PiUserCirclePlusLight } from "react-icons/pi";
 import { NavLink } from "react-router-dom";
 
