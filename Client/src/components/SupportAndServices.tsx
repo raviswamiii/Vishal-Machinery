@@ -77,7 +77,7 @@ export const SupportAndServices = () => {
           return (
             <div
               key={service.title}
-              className="group bg-white rounded-3xl border border-gray-100 shadow-lg hover:shadow-xl hover:-translate-y-2 transition-all duration-300 p-8 flex flex-col border"
+              className="group bg-white rounded-3xl border border-gray-100 shadow-lg hover:shadow-xl hover:-translate-y-2 transition-all duration-300 p-8 flex flex-col"
             >
               {/* Icon */}
               <div className="flex justify-center">
@@ -105,7 +105,7 @@ export const SupportAndServices = () => {
 
                   return (
                     <div key={item.title} className="flex items-center gap-3">
-                      <ItemIcon className="text-yellow-500 text-lg flex-shrink-0" />
+                      <ItemIcon className="text-yellow-500 text-lg shrink-0" />
                       <span className="text-gray-700 text-sm">
                         {item.title}
                       </span>

@@ -2,7 +2,7 @@ import FactoryImage from "../assets/CompanyImage/Factory Image.jpg";
 
 export const ContactHeroSection = () => {
   return (
-      <div className="relative h-[calc(100vh-60px)]">
+      <div className="relative h-[calc(100vh-60px)] max-h-187.5">
         <img
           className="absolute h-full w-full object-cover"
           src={FactoryImage}
