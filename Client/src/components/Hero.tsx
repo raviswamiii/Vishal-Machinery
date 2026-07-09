@@ -34,7 +34,7 @@ export const Hero = () => {
             productivity and achieve consistent results across every operation.
           </p>
 
-          <div className="flex flex-col gap-[2vh] mt-2">
+          <div className="flex flex-col gap-3 mt-2">
             <button className="bg-yellow-400 text-black text-xs font-extrabold rounded-sm flex justify-center items-center gap-2 py-4 px-[2vw] sm:w-[75%] md:w-[65%]">
               <RiCameraLensFill className="text-xl" />
               <span>EXPLORE MACHINES</span>
