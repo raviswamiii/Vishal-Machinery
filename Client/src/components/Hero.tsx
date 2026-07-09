@@ -16,8 +16,8 @@ export const Hero = () => {
   return (
     <div className="h-[calc(100vh-60px)] max-h-187.5 flex flex-col bg-black">
       <div className="relative flex flex-col justify-center overflow-hidden">
-        <div className="flex-1 absolute z-10 w-[50%] lg:w-[40%] text-white pl-[4vw] sm:pl-[8vw] flex flex-col justify-center gap-[2vh]">
-          <div className="flex flex-col gap-[1vh]">
+        <div className="flex-1 absolute z-10 w-[50%] lg:w-[40%] text-white pl-[4vw] sm:pl-[8vw] flex flex-col justify-center gap-2">
+          <div className="flex flex-col gap-1">
             <p className="font-semibold bg-linear-to-r from-yellow-300 via-yellow-500 to-amber-700 bg-clip-text text-transparent">
               BUILD FOR PRECISION.
             </p>
@@ -34,13 +34,13 @@ export const Hero = () => {
             productivity and achieve consistent results across every operation.
           </p>
 
-          <div className="flex flex-col gap-[2vh] mt-[1vh]">
-            <button className="bg-yellow-400 text-black text-xs font-extrabold rounded-sm flex justify-center items-center gap-2 py-[2.5vh] px-[2vw] sm:w-[75%] md:w-[65%]">
+          <div className="flex flex-col gap-[2vh] mt-2">
+            <button className="bg-yellow-400 text-black text-xs font-extrabold rounded-sm flex justify-center items-center gap-2 py-4 px-[2vw] sm:w-[75%] md:w-[65%]">
               <RiCameraLensFill className="text-xl" />
               <span>EXPLORE MACHINES</span>
             </button>
 
-            <button className="bg-black text-white border border-gray-100 text-xs font-bold rounded-sm flex justify-center items-center gap-2 py-[2.5vh] px-[2vw] sm:w-[75%] md:w-[65%]">
+            <button className="bg-black text-white border border-gray-100 text-xs font-bold rounded-sm flex justify-center items-center gap-2 py-4 px-[2vw] sm:w-[75%] md:w-[65%]">
               <MdOutlineSlowMotionVideo className="text-xl" />
               <span>WATCH VIDEO</span>
             </button>
