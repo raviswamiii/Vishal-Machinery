@@ -1,7 +1,7 @@
 import { RiMenu3Fill } from "react-icons/ri";
 import logo from "../assets/Logo/Logo.png";
 import { PiUserCirclePlusLight } from "react-icons/pi";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 
 const navItems = [
   { name: "HOME", path: "/" },
@@ -45,10 +45,10 @@ export const Navbar = () => {
       <div className="flex items-center gap-4">
 
         {/* Sign Up Button */}
-        <button className="flex bg-yellow-400 rounded-sm justify-center items-center gap-2 px-3 md:px-4 py-1 md:py-2 cursor-pointer">
+        <Link to="/login" className="flex bg-yellow-400 rounded-sm justify-center items-center gap-2 px-3 md:px-4 py-1 md:py-2 cursor-pointer">
           <PiUserCirclePlusLight className="text-lg md:text-xl" />
           <span className="text-xs font-bold montserrat">SIGN UP</span>
-        </button>
+        </Link>
 
         {/* Mobile Hamburger Menu Button */}
         <button className="md:hidden">
