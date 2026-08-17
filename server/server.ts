@@ -1,8 +1,8 @@
+import "dotenv/config";
 import express from "express";
-import dotenv from "dotenv";
+import databaseConnection from "./config/mongodb.ts";
 
-dotenv.config();
-
+databaseConnection();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
