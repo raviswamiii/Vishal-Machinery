@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const databaseConnection = async () => {
   mongoose.connection.on("connected", () => {
-    console.log("🗄️ Connected to database.");
+    console.log("🗄️  Connected to database.");
   });
 
   const MONGODB_URI = process.env.MONGODB_URI;

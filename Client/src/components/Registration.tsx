@@ -9,12 +9,12 @@ import {
   UserRound,
   Phone,
   LogIn,
-  ArrowLeft
+  ArrowLeft,
 } from "lucide-react";
 
 export const Registration = () => {
   const [name, setName] = useState("");
-  const [whatsappNumber, setWhatsappNumber] = useState("");
+  const [number, setNumber] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -27,7 +27,7 @@ export const Registration = () => {
   const onSubmitHandler = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
-    if (!name || !whatsappNumber || !email || !password) {
+    if (!name || !number || !email || !password) {
       setError("All fields are required.");
       return;
     }
@@ -35,9 +35,9 @@ export const Registration = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post(`${backendURL}/login`, {
+      const response = await axios.post(`${backendURL}/api/users/register`, {
         name,
-        whatsappNumber,
+        number,
         email,
         password,
       });
@@ -59,13 +59,13 @@ export const Registration = () => {
   return (
     <div className="min-h-screen bg-[#080808] flex items-center justify-center p-6 pt-10">
       <div className="absolute top-4 left-4">
-              <Link
-                to="/"
-                className="text-[#ffc400] hover:underline flex items-center gap-2"
-              >
-                <ArrowLeft size={20} />
-              </Link>
-            </div>
+        <Link
+          to="/"
+          className="text-[#ffc400] hover:underline flex items-center gap-2"
+        >
+          <ArrowLeft size={20} />
+        </Link>
+      </div>
       <div className="w-full max-w-md">
         {/* Card */}
 
@@ -113,9 +113,9 @@ export const Registration = () => {
                 <input
                   type="tel"
                   placeholder="Enter your number"
-                  value={whatsappNumber}
+                  value={number}
                   onChange={(e) => {
-                    setWhatsappNumber(e.target.value);
+                    setNumber(e.target.value);
                     setError("");
                   }}
                   className="w-full bg-transparent outline-none text-white text-sm placeholder:text-gray-600"
