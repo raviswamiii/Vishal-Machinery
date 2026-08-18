@@ -44,7 +44,7 @@ export const Login = () => {
   };
 
   return (
-    <div className="h-screen bg-[#080808] flex items-center justify-center py-16">
+    <div className="h-screen bg-[#080808] flex items-center justify-center p-6">
       <div className="w-full max-w-md">
         {/* Card */}
 
@@ -71,7 +71,7 @@ export const Login = () => {
                 Email
               </label>
 
-              <div className="h-14 flex items-center gap-3 px-4 rounded-md border border-[#3a3a3a] bg-[#0d0d0d] focus-within:border-[#ffc400] transition">
+              <div className="h-10 flex items-center gap-3 px-4 rounded-md border border-[#3a3a3a] bg-[#0d0d0d] focus-within:border-[#ffc400] transition">
                 <Mail size={20} className="text-gray-400" />
 
                 <input
@@ -94,7 +94,7 @@ export const Login = () => {
                 Password
               </label>
 
-              <div className="h-14 flex items-center gap-3 px-4 rounded-md border border-[#3a3a3a] bg-[#0d0d0d] focus-within:border-[#ffc400] transition">
+              <div className="h-10 flex items-center gap-3 px-4 rounded-md border border-[#3a3a3a] bg-[#0d0d0d] focus-within:border-[#ffc400] transition">
                 <LockKeyhole size={20} className="text-gray-400" />
 
                 <input
@@ -129,7 +129,7 @@ export const Login = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full h-14 bg-[#ffc400] hover:bg-[#ffd333] text-black font-bold rounded-md flex items-center justify-center gap-3 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full h-10 bg-[#ffc400] hover:bg-[#ffd333] text-black font-bold rounded-md flex items-center justify-center gap-3 transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <LogIn size={19} />
 
