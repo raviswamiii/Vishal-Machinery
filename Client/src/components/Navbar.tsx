@@ -2,6 +2,7 @@ import { RiMenu3Fill } from "react-icons/ri";
 import logo from "../assets/Logo/Logo.png";
 import { PiUserCirclePlusLight } from "react-icons/pi";
 import { NavLink, Link } from "react-router-dom";
+import { useUserContext } from "../context/userContext";
 
 const navItems = [
   { name: "HOME", path: "/" },
@@ -11,9 +12,9 @@ const navItems = [
 ];
 
 export const Navbar = () => {
+  const { token } = useUserContext();
   return (
     <div className="h-15 bg-[#F6FAEF] flex justify-between items-center p-2 md:px-10">
-        
       {/* Brand Logo */}
       <div className="flex items-center gap-2">
         <img
@@ -22,7 +23,9 @@ export const Navbar = () => {
           alt="Vishal Machinery Logo"
         />
         <div>
-          <h1 className="text-2xl tracking-widest bold-bebas-neue h-6">VISHAL</h1>
+          <h1 className="text-2xl tracking-widest bold-bebas-neue h-6">
+            VISHAL
+          </h1>
           <p className="text-[10px] tracking-[0.2em] bebas-neue">MACHINERY</p>
         </div>
       </div>
@@ -43,12 +46,16 @@ export const Navbar = () => {
 
       {/* Sign Up Button and Mobile Menu */}
       <div className="flex items-center gap-4">
-
         {/* Sign Up Button */}
-        <Link to="/register" className="flex bg-yellow-400 rounded-sm justify-center items-center gap-2 px-3 md:px-4 py-1 md:py-2 cursor-pointer">
-          <PiUserCirclePlusLight className="text-lg md:text-xl" />
-          <span className="text-xs font-bold montserrat">SIGN UP</span>
-        </Link>
+        {!token && (
+          <Link
+            to="/register"
+            className="flex bg-yellow-400 rounded-sm justify-center items-center gap-2 px-3 md:px-4 py-1 md:py-2 cursor-pointer"
+          >
+            <PiUserCirclePlusLight className="text-lg md:text-xl" />
+            <span className="text-xs font-bold montserrat">SIGN UP</span>
+          </Link>
+        )}
 
         {/* Mobile Hamburger Menu Button */}
         <button className="md:hidden">

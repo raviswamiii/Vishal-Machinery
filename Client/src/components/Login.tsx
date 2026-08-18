@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import { Eye, EyeOff, LockKeyhole, Mail, LogIn, ArrowLeft } from "lucide-react";
+import { useUserContext } from "../context/userContext";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
@@ -12,6 +13,7 @@ export const Login = () => {
 
   const backendURL = import.meta.env.VITE_BACKEND_URL;
   const navigate = useNavigate();
+  const { setToken } = useUserContext();
 
   const onSubmitHandler = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
@@ -24,14 +26,14 @@ export const Login = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post(`${backendURL}/login`, {
+      const response = await axios.post(`${backendURL}/api/users/login`, {
         email,
         password,
       });
 
       if (response.data?.success) {
         localStorage.setItem("token", response.data.token);
-
+        setToken(response.data.token);
         navigate("/");
       } else {
         setError(response.data?.message || "Login failed.");

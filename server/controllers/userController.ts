@@ -88,6 +88,68 @@ export const userRegistration = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error.",
+    });
+  }
+};
+
+export const userLogin = async (req: Request, res: Response) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "All fields are required.",
+      });
+    }
+
+    const normalizedEmail = email.toLowerCase().trim();
+
+    if (!validator.isEmail(normalizedEmail)) {
+      return res.status(400).json({
+        success: false,
+        message: "Please enter a valid email address.",
+      });
+    }
+
+    const exists = await userModel.findOne({
+      email: normalizedEmail,
+    });
+
+    if (!exists) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid credentials.",
+      });
+    }
+
+    const isMatch = await bcrypt.compare(password, exists.password);
+
+    if (!isMatch) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid credentials.",
+      });
+    }
+
+    const token = createToken(exists._id.toString(), exists.name);
+
+    return res.status(200).json({
+      success: true,
+      message: "Sign in successful.",
+      token,
+      user: {
+        id: exists._id,
+        name: exists.name,
+        email: exists.email,
+        number: exists.number,
+      },
+    });
+  } catch (error) {
+    console.error(error);
 
     return res.status(500).json({
       success: false,
