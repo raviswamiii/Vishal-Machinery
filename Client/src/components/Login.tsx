@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
-import { Eye, EyeOff, LockKeyhole, Mail, LogIn } from "lucide-react";
+import { Eye, EyeOff, LockKeyhole, Mail, LogIn, ArrowLeft } from "lucide-react";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
@@ -45,9 +45,17 @@ export const Login = () => {
 
   return (
     <div className="h-screen bg-[#080808] flex items-center justify-center p-6">
+      <div className="absolute top-4 left-4">
+        <Link
+          to="/"
+          className="text-[#ffc400] hover:underline flex items-center gap-2"
+        >
+          <ArrowLeft size={20} />
+        </Link>
+      </div>
+
       <div className="w-full max-w-md">
         {/* Card */}
-
         <div className="rounded-2xl border border-[#2c2c2c] bg-linear-to-br from-[#151515] to-[#101010] p-7 sm:p-10 shadow-2xl">
           {/* Heading */}
 

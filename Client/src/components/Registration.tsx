@@ -9,6 +9,7 @@ import {
   UserRound,
   Phone,
   LogIn,
+  ArrowLeft
 } from "lucide-react";
 
 export const Registration = () => {
@@ -56,7 +57,15 @@ export const Registration = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#080808] flex items-center justify-center p-6">
+    <div className="min-h-screen bg-[#080808] flex items-center justify-center p-6 pt-10">
+      <div className="absolute top-4 left-4">
+              <Link
+                to="/"
+                className="text-[#ffc400] hover:underline flex items-center gap-2"
+              >
+                <ArrowLeft size={20} />
+              </Link>
+            </div>
       <div className="w-full max-w-md">
         {/* Card */}
 
