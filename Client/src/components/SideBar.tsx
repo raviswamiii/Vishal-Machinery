@@ -10,22 +10,22 @@ export const SideBar = () => {
       <X onClick={() => setSideBar(false)} size={24} strokeWidth={2} className="absolute right-4 top-4" />
 
       <div className="flex flex-col gap-8 mt-20 ml-3 text-sm font-semibold">
-        <NavLink to="/" className="flex items-center gap-4">
+        <NavLink onClick={() => setSideBar(false)} to="/" className="flex items-center gap-4">
           <Home size={20} strokeWidth={2} className="inline-block ml-2" />
           <p>HOME</p>
         </NavLink>
 
-        <NavLink to="/machines" className="flex items-center gap-4">
+        <NavLink onClick={() => setSideBar(false)} to="/machines" className="flex items-center gap-4">
           <Cog size={20} strokeWidth={2} className="inline-block ml-2" />
           <p>MACHINES</p>
         </NavLink>
 
-        <NavLink to="/aboutUs" className="flex items-center gap-4">
+        <NavLink onClick={() => setSideBar(false)} to="/aboutUs" className="flex items-center gap-4">
           <Info size={20} strokeWidth={2} className="inline-block ml-2" />
           <p>ABOUT US</p>
         </NavLink>
 
-        <NavLink to="/contact" className="flex items-center gap-4">
+        <NavLink onClick={() => setSideBar(false)} to="/contact" className="flex items-center gap-4">
           <Contact size={20} strokeWidth={2} className="inline-block ml-2" />
           <p>CONTACT</p>
         </NavLink>{" "}
