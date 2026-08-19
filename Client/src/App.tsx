@@ -9,6 +9,7 @@ import { Contact } from "./pages/Contact";
 import { ScrollToTop } from "./components/ScrollToTop";
 import { Login } from "./components/Login";
 import { Registration } from "./components/Registration";
+import { SideBar } from "./components/SideBar";
 
 export const App = () => {
   const location = useLocation();
@@ -22,7 +23,7 @@ export const App = () => {
       <ScrollToTop />
 
       {!hideNavbarAndFooter && <Navbar />}
-
+      <SideBar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/machines" element={<Machines />} />

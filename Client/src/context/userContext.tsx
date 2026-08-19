@@ -3,6 +3,8 @@ import { createContext, useContext, useState, type ReactNode } from "react";
 interface UserContextType {
   token: string | null;
   setToken: (token: string | null) => void;
+  sideBar: boolean;
+  setSideBar: (sidebar: boolean) => void;
 }
 
 interface UserContextProviderProps {
@@ -17,7 +19,10 @@ export const UserContextProvider = ({ children }: UserContextProviderProps) => {
   const [token, setToken] = useState<string | null>(
     localStorage.getItem("token"),
   );
-  const value: UserContextType = { token, setToken };
+
+  const [sideBar, setSideBar] = useState<boolean>(false);
+
+  const value: UserContextType = { token, setToken, sideBar, setSideBar };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };

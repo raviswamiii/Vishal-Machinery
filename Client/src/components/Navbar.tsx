@@ -12,7 +12,7 @@ const navItems = [
 ];
 
 export const Navbar = () => {
-  const { token } = useUserContext();
+  const { token, setSideBar } = useUserContext();
   return (
     <div className="h-15 bg-[#F6FAEF] flex justify-between items-center p-2 md:px-10">
       {/* Brand Logo */}
@@ -58,7 +58,7 @@ export const Navbar = () => {
         )}
 
         {/* Mobile Hamburger Menu Button */}
-        <button className="md:hidden">
+        <button onClick={() => setSideBar(true)} className="md:hidden">
           <RiMenu3Fill className="text-xl" />
         </button>
       </div>
