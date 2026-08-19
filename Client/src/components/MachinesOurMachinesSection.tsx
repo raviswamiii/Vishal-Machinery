@@ -1,5 +1,6 @@
 import PackagingMachine from "../assets/Products/PackagingMachine.png";
 import { GoArrowRight } from "react-icons/go";
+import { Link } from "react-router-dom";
 
 const productSection = [1, 2, 3, 4, 5];
 const products = [1, 2, 3, 4, 5];
@@ -50,10 +51,10 @@ export const MachinesOurMachinesSection = () => {
                     Cost-effective and efficient solution for small to medium
                     production.
                   </p>
-                  <button className="text-yellow-400 text-sm montserrat font-semibold">
+                  <Link to="/product" className="text-yellow-400 text-sm montserrat font-semibold">
                     VIEW DETAILS
                     <GoArrowRight className="text-lg inline-block ml-4" />
-                  </button>
+                  </Link>
                 </div>
               </div>
             ))}

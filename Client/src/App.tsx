@@ -10,6 +10,7 @@ import { ScrollToTop } from "./components/ScrollToTop";
 import { Login } from "./components/Login";
 import { Registration } from "./components/Registration";
 import { SideBar } from "./components/SideBar";
+import { Product } from "./components/Product";
 
 export const App = () => {
   const location = useLocation();
@@ -31,6 +32,7 @@ export const App = () => {
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Registration />} />
+        <Route path="/product" element={<Product />} />
       </Routes>
 
       {!hideNavbarAndFooter && <Footer />}
