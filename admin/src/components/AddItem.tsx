@@ -13,6 +13,7 @@ export const AddItem = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
+  const [category, setCategory] = useState("");
 
   const onSubmitHandler = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
@@ -22,6 +23,7 @@ export const AddItem = () => {
       formData.append("name", name);
       formData.append("description", description);
       formData.append("price", price);
+      formData.append("category", category);
 
       image1 && formData.append("image1", image1);
       image2 && formData.append("image2", image2);
@@ -29,7 +31,7 @@ export const AddItem = () => {
       image4 && formData.append("image4", image4);
 
       const response = await axios.post(
-        backendUrl + "/api/product/add",
+        backendUrl + "/api/products/add",
         formData,
         // { headers: { token } },
       );
@@ -39,6 +41,7 @@ export const AddItem = () => {
         toast.success(response.data.message);
         setName("");
         setDescription("");
+        setCategory("");
         setImage1(null);
         setImage2(null);
         setImage3(null);
@@ -140,6 +143,33 @@ export const AddItem = () => {
           value={description}
           className="w-full max-w-125 px-3 py-2"
           placeholder="Write content here"
+          required
+        />
+      </div>
+
+      <div className="w-full">
+        <p className="mb-2">Price</p>
+
+        <input
+          onChange={(e) => setPrice(e.target.value)}
+          value={price}
+          className="w-full max-w-125 px-3 py-2 border"
+          type="number"
+          min="0"
+          placeholder="Enter price"
+          required
+        />
+      </div>
+
+      <div className="w-full">
+        <p className="mb-2">Category</p>
+
+        <input
+          onChange={(e) => setCategory(e.target.value)}
+          value={category}
+          className="w-full max-w-125 px-3 py-2 border"
+          type="text"
+          placeholder="Enter category"
           required
         />
       </div>
