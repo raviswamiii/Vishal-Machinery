@@ -1,6 +1,7 @@
 import logo from "../assets/logo.png";
 import { PiUserCirclePlusLight } from "react-icons/pi";
 import { Plus } from "lucide-react";
+import { AddItem } from "../components/AddItem";
 
 export const Dashboard = () => {
   return (
@@ -26,10 +27,15 @@ export const Dashboard = () => {
         </div>
       </div>
 
-      <div className="border-r border-gray-300 py-4 h-full w-fit montserrat">
-        <div className="py-2 px-4 text-md font-semibold border border-r-0 border-gray-300 rounded-l-md flex items-center gap-3">
-          <Plus size={20} className="border rounded-full p-0.5" />
-          <p className="hidden sm:block">Add Items</p>
+      <div className="h-full flex">
+        <div className="border-r border-gray-300 py-4 h-full w-fit montserrat">
+          <div className="py-2 px-4 text-md font-semibold border border-r-0 border-gray-300 rounded-l-md flex items-center gap-3">
+            <Plus size={20} className="border rounded-full p-0.5" />
+            <p className="hidden sm:block">Add Items</p>
+          </div>
+        </div>
+        <div>
+          <AddItem />
         </div>
       </div>
     </div>
