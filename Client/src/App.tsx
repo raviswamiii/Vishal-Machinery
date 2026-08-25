@@ -32,7 +32,7 @@ export const App = () => {
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Registration />} />
-        <Route path="/product" element={<Product />} />
+        <Route path="/product/:productId" element={<Product />} />
       </Routes>
 
       {!hideNavbarAndFooter && <Footer />}

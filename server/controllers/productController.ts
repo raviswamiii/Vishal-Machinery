@@ -5,13 +5,41 @@ import cloudinary from "../config/cloudinary";
 
 export const addProduct = async (req: Request, res: Response) => {
   try {
-    const { name, description, price, category } = req.body;
+    const {
+      name,
+      description,
+      price,
+      category,
+      productInfo,
+      productInfo2,
+    } = req.body;
 
     // Validate required fields
     if (!name || !description || !price || !category) {
       return res.status(400).json({
         success: false,
         message: "All fields are required",
+      });
+    }
+
+    // Parse product information
+    let parsedProductInfo = [];
+    let parsedProductInfo2 = [];
+
+    try {
+      parsedProductInfo =
+        typeof productInfo === "string"
+          ? JSON.parse(productInfo)
+          : productInfo || [];
+
+      parsedProductInfo2 =
+        typeof productInfo2 === "string"
+          ? JSON.parse(productInfo2)
+          : productInfo2 || [];
+    } catch (error) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid product information format",
       });
     }
 
@@ -53,10 +81,14 @@ export const addProduct = async (req: Request, res: Response) => {
       description: description.trim(),
       price: Number(price),
       category: categoryData._id,
+
       image1: imageUrls[0] || "",
       image2: imageUrls[1] || "",
       image3: imageUrls[2] || "",
       image4: imageUrls[3] || "",
+
+      productInfo: parsedProductInfo,
+      productInfo2: parsedProductInfo2,
     });
 
     return res.status(201).json({
@@ -69,7 +101,10 @@ export const addProduct = async (req: Request, res: Response) => {
 
     return res.status(500).json({
       success: false,
-      message: error instanceof Error ? error.message : "Internal server error",
+      message:
+        error instanceof Error
+          ? error.message
+          : "Internal server error",
     });
   }
 };
@@ -87,10 +122,13 @@ export const getAllProducts = async (req: Request, res: Response) => {
 
     return res.status(500).json({
       success: false,
-      message: error instanceof Error ? error.message : "Internal server error",
+      message:
+        error instanceof Error
+          ? error.message
+          : "Internal server error",
     });
   }
-}
+};
 
 export const getProduct = async (req: Request, res: Response) => {
   try {
@@ -105,7 +143,10 @@ export const getProduct = async (req: Request, res: Response) => {
     }
 
     // Fetch product from database
-    const product = await Product.findById(productId);
+    const product = await Product.findById(productId).populate(
+      "category",
+      "name"
+    );
 
     if (!product) {
       return res.status(404).json({
@@ -123,7 +164,10 @@ export const getProduct = async (req: Request, res: Response) => {
 
     return res.status(500).json({
       success: false,
-      message: error instanceof Error ? error.message : "Internal server error",
+      message:
+        error instanceof Error
+          ? error.message
+          : "Internal server error",
     });
   }
 };
