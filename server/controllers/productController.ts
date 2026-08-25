@@ -69,8 +69,61 @@ export const addProduct = async (req: Request, res: Response) => {
 
     return res.status(500).json({
       success: false,
-      message:
-        error instanceof Error ? error.message : "Internal server error",
+      message: error instanceof Error ? error.message : "Internal server error",
+    });
+  }
+};
+
+export const getAllProducts = async (req: Request, res: Response) => {
+  try {
+    const products = await Product.find().populate("category", "name");
+
+    return res.status(200).json({
+      success: true,
+      products,
+    });
+  } catch (error) {
+    console.error(error);
+
+    return res.status(500).json({
+      success: false,
+      message: error instanceof Error ? error.message : "Internal server error",
+    });
+  }
+}
+
+export const getProduct = async (req: Request, res: Response) => {
+  try {
+    const { productId } = req.params;
+
+    // Validate productId
+    if (!productId) {
+      return res.status(400).json({
+        success: false,
+        message: "Product ID is required",
+      });
+    }
+
+    // Fetch product from database
+    const product = await Product.findById(productId);
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      product,
+    });
+  } catch (error) {
+    console.error(error);
+
+    return res.status(500).json({
+      success: false,
+      message: error instanceof Error ? error.message : "Internal server error",
     });
   }
 };

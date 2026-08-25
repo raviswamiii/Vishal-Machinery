@@ -1,4 +1,6 @@
+import { useEffect, useState } from "react";
 import PackagingMachine from "../assets/Products/PackagingMachine.png";
+import axios from "axios";
 
 const productInfo = [
   { label: "Capacity", value: "1000 Pouch/Hour" },
@@ -12,6 +14,7 @@ const productInfo = [
   { label: "Country Of Origin", value: "Made In India" },
   { label: "Delivery Time", value: "5 - 7 Days" },
 ];
+
 const productInfo2 = [
   { label: "Usage/Application", value: "Food Processing Industry" },
   { label: "Packaging Material", value: "Plastic" },
@@ -30,7 +33,26 @@ const productInfo2 = [
   { label: "Dimension", value: "1050mm x 990mm x 2100mm" },
   { label: "Country Of Origin", value: "Made In India" },
 ];
+
 export const Product = () => {
+  const [product, setProduct] = useState(null);
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
+  const fetchProduct = async () => {
+    try {
+      const response = await axios.get(`${backendUrl}/api/getProduct/:productId`);
+      if (response.data.success) {
+        setProduct(response.data.product);
+      }
+    } catch (error) {
+      console.error("Error fetching product:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProduct();
+  }, []);
+
   return (
     <div className="md:px-10">
       <div className="h-[calc(100vh-60px)] overflow-hidden p-6 flex flex-col sm:flex-row-reverse gap-4">
