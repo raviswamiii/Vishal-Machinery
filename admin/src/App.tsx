@@ -13,7 +13,7 @@ export const App = () => {
       <ToastContainer />
       <Dashboard />
       <Routes>
-        <Route path="/addItem" element={<AddItem />} />
+        <Route path="/" element={<AddItem />} />
         <Route path="/listItems" element={<ListItems />} />
       </Routes>
     </div>

@@ -41,10 +41,6 @@ export const AddItem = () => {
     },
   ]);
 
-  // --------------------------------
-  // Product Information
-  // --------------------------------
-
   const addProductInfo = () => {
     setProductInfo([
       ...productInfo,
@@ -58,7 +54,7 @@ export const AddItem = () => {
   const updateProductInfo = (
     index: number,
     field: "label" | "value",
-    value: string
+    value: string,
   ) => {
     const updated = [...productInfo];
 
@@ -74,10 +70,6 @@ export const AddItem = () => {
     setProductInfo(productInfo.filter((_, i) => i !== index));
   };
 
-  // --------------------------------
-  // Additional Product Information
-  // --------------------------------
-
   const addProductInfo2 = () => {
     setProductInfo2([
       ...productInfo2,
@@ -91,7 +83,7 @@ export const AddItem = () => {
   const updateProductInfo2 = (
     index: number,
     field: "label" | "value",
-    value: string
+    value: string,
   ) => {
     const updated = [...productInfo2];
 
@@ -106,10 +98,6 @@ export const AddItem = () => {
   const removeProductInfo2 = (index: number) => {
     setProductInfo2(productInfo2.filter((_, i) => i !== index));
   };
-
-  // --------------------------------
-  // Reset Form
-  // --------------------------------
 
   const resetForm = () => {
     setName("");
@@ -137,13 +125,7 @@ export const AddItem = () => {
     ]);
   };
 
-  // --------------------------------
-  // Submit
-  // --------------------------------
-
-  const onSubmitHandler = async (e: {
-    preventDefault: () => void;
-  }) => {
+  const onSubmitHandler = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
     if (isLoading) return;
@@ -161,21 +143,15 @@ export const AddItem = () => {
       formData.append(
         "productInfo",
         JSON.stringify(
-          productInfo.filter(
-            (item) =>
-              item.label.trim() || item.value.trim()
-          )
-        )
+          productInfo.filter((item) => item.label.trim() || item.value.trim()),
+        ),
       );
 
       formData.append(
         "productInfo2",
         JSON.stringify(
-          productInfo2.filter(
-            (item) =>
-              item.label.trim() || item.value.trim()
-          )
-        )
+          productInfo2.filter((item) => item.label.trim() || item.value.trim()),
+        ),
       );
 
       if (image1) {
@@ -196,7 +172,7 @@ export const AddItem = () => {
 
       const response = await axios.post(
         backendUrl + "/api/products/add",
-        formData
+        formData,
       );
 
       if (response.data.success) {
@@ -207,10 +183,7 @@ export const AddItem = () => {
       console.log(error);
 
       if (axios.isAxiosError(error)) {
-        toast.error(
-          error.response?.data?.message ||
-            "Something went wrong"
-        );
+        toast.error(error.response?.data?.message || "Something went wrong");
       } else if (error instanceof Error) {
         toast.error(error.message);
       } else {
@@ -221,10 +194,6 @@ export const AddItem = () => {
     }
   };
 
-  // --------------------------------
-  // Image Upload Component
-  // --------------------------------
-
   const ImageUpload = ({
     id,
     image,
@@ -233,9 +202,7 @@ export const AddItem = () => {
   }: {
     id: string;
     image: File | null;
-    setImage: React.Dispatch<
-      React.SetStateAction<File | null>
-    >;
+    setImage: React.Dispatch<React.SetStateAction<File | null>>;
     label: string;
   }) => {
     return (
@@ -244,29 +211,18 @@ export const AddItem = () => {
         className="group relative aspect-square w-full cursor-pointer overflow-hidden rounded-lg border-2 border-dashed border-gray-400 bg-gray-50 transition hover:border-yellow-400 hover:bg-yellow-50"
       >
         <img
-          src={
-            image
-              ? URL.createObjectURL(image)
-              : upload_area
-          }
+          src={image ? URL.createObjectURL(image) : upload_area}
           alt=""
           className={`h-full w-full ${
-            image
-              ? "object-cover"
-              : "object-contain p-8 opacity-60"
+            image ? "object-cover" : "object-contain p-8 opacity-60"
           }`}
         />
 
         {!image && (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-2">
-            <ImagePlus
-              size={22}
-              className="text-gray-500"
-            />
+            <ImagePlus size={22} className="text-gray-500" />
 
-            <span className="text-xs font-semibold text-gray-600">
-              {label}
-            </span>
+            <span className="text-xs font-semibold text-gray-600">{label}</span>
           </div>
         )}
 
@@ -281,19 +237,11 @@ export const AddItem = () => {
           type="file"
           accept="image/*"
           hidden
-          onChange={(e) =>
-            setImage(
-              e.target.files?.[0] || null
-            )
-          }
+          onChange={(e) => setImage(e.target.files?.[0] || null)}
         />
       </label>
     );
   };
-
-  // --------------------------------
-  // Specification Table
-  // --------------------------------
 
   const SpecificationTable = ({
     data,
@@ -303,11 +251,7 @@ export const AddItem = () => {
   }: {
     data: ProductInfo[];
     onAdd: () => void;
-    onUpdate: (
-      index: number,
-      field: "label" | "value",
-      value: string
-    ) => void;
+    onUpdate: (index: number, field: "label" | "value", value: string) => void;
     onRemove: (index: number) => void;
   }) => {
     return (
@@ -334,15 +278,9 @@ export const AddItem = () => {
 
                 <input
                   type="text"
-                  placeholder="e.g. Capacity"
+                  placeholder="Enter specification..."
                   value={info.label}
-                  onChange={(e) =>
-                    onUpdate(
-                      index,
-                      "label",
-                      e.target.value
-                    )
-                  }
+                  onChange={(e) => onUpdate(index, "label", e.target.value)}
                   className="w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/20"
                 />
               </div>
@@ -355,15 +293,9 @@ export const AddItem = () => {
 
                 <input
                   type="text"
-                  placeholder="e.g. 1000 Pouch/Hour"
+                  placeholder="Enter value..."
                   value={info.value}
-                  onChange={(e) =>
-                    onUpdate(
-                      index,
-                      "value",
-                      e.target.value
-                    )
-                  }
+                  onChange={(e) => onUpdate(index, "value", e.target.value)}
                   className="w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/20"
                 />
               </div>
@@ -391,7 +323,6 @@ export const AddItem = () => {
             <span className="flex h-6 w-6 items-center justify-center rounded-full border border-gray-400 bg-white">
               <Plus size={14} />
             </span>
-
             Add specification
           </button>
         </div>
@@ -404,10 +335,6 @@ export const AddItem = () => {
       onSubmit={onSubmitHandler}
       className="mx-auto w-full max-w-5xl space-y-6 p-4 pb-20 sm:p-6 md:p-8"
     >
-      {/* -------------------------------- */}
-      {/* Page Header */}
-      {/* -------------------------------- */}
-
       <div>
         <h1 className="text-2xl font-bold tracking-tight text-gray-950 md:text-3xl">
           Add New Product
@@ -417,10 +344,6 @@ export const AddItem = () => {
           Add a new machine to your product catalog.
         </p>
       </div>
-
-      {/* -------------------------------- */}
-      {/* Product Information */}
-      {/* -------------------------------- */}
 
       <section className="rounded-xl border border-gray-300 bg-white shadow-sm">
         <div className="border-b border-gray-300 px-5 py-4 md:px-6">
@@ -443,10 +366,8 @@ export const AddItem = () => {
             <input
               type="text"
               value={name}
-              onChange={(e) =>
-                setName(e.target.value)
-              }
-              placeholder="e.g. Semi Automatic Pouch Packing Machine"
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Enter product name..."
               required
               className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/20"
             />
@@ -461,10 +382,8 @@ export const AddItem = () => {
             <input
               type="text"
               value={category}
-              onChange={(e) =>
-                setCategory(e.target.value)
-              }
-              placeholder="e.g. Pouch Packing Machine"
+              onChange={(e) => setCategory(e.target.value)}
+              placeholder="Enter category..."
               required
               className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/20"
             />
@@ -485,10 +404,8 @@ export const AddItem = () => {
                 type="number"
                 min="0"
                 value={price}
-                onChange={(e) =>
-                  setPrice(e.target.value)
-                }
-                placeholder="390000"
+                onChange={(e) => setPrice(e.target.value)}
+                placeholder="Enter price..."
                 required
                 className="w-full rounded-lg border border-gray-300 bg-white py-2.5 pl-8 pr-3 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/20"
               />
@@ -503,9 +420,7 @@ export const AddItem = () => {
 
             <textarea
               value={description}
-              onChange={(e) =>
-                setDescription(e.target.value)
-              }
+              onChange={(e) => setDescription(e.target.value)}
               placeholder="Write a short description of the product..."
               rows={4}
               required
@@ -513,26 +428,19 @@ export const AddItem = () => {
             />
 
             <p className="mt-1.5 text-xs text-gray-500">
-              Keep the description clear and focused on the
-              product's main benefits.
+              Keep the description clear and focused on the product's main
+              benefits.
             </p>
           </div>
         </div>
       </section>
 
-      {/* -------------------------------- */}
-      {/* Product Images */}
-      {/* -------------------------------- */}
-
       <section className="rounded-xl border border-gray-300 bg-white shadow-sm">
         <div className="border-b border-gray-300 px-5 py-4 md:px-6">
-          <h2 className="text-base font-bold text-gray-900">
-            Product Images
-          </h2>
+          <h2 className="text-base font-bold text-gray-900">Product Images</h2>
 
           <p className="mt-1 text-sm text-gray-600">
-            Upload clear images of the machine. Up to 4
-            images.
+            Upload clear and up to 4 images.
           </p>
         </div>
 
@@ -568,15 +476,10 @@ export const AddItem = () => {
           </div>
 
           <p className="mt-3 text-xs text-gray-500">
-            Recommended: high-quality JPG, PNG or WebP
-            images.
+            Recommended: high-quality JPG, PNG or WebP images.
           </p>
         </div>
       </section>
-
-      {/* -------------------------------- */}
-      {/* Product Specifications */}
-      {/* -------------------------------- */}
 
       <section className="rounded-xl border border-gray-300 bg-white shadow-sm">
         <div className="border-b border-gray-300 px-5 py-4 md:px-6">
@@ -585,8 +488,7 @@ export const AddItem = () => {
           </h2>
 
           <p className="mt-1 text-sm text-gray-600">
-            Add technical specifications customers can see
-            on the product page.
+            Add technical specifications customers can see on the product page.
           </p>
         </div>
 
@@ -600,10 +502,6 @@ export const AddItem = () => {
         </div>
       </section>
 
-      {/* -------------------------------- */}
-      {/* Additional Specifications */}
-      {/* -------------------------------- */}
-
       <section className="rounded-xl border border-gray-300 bg-white shadow-sm">
         <div className="border-b border-gray-300 px-5 py-4 md:px-6">
           <h2 className="text-base font-bold text-gray-900">
@@ -611,8 +509,7 @@ export const AddItem = () => {
           </h2>
 
           <p className="mt-1 text-sm text-gray-600">
-            Add any additional product details that don't
-            fit above.
+            Add any additional product details that don't fit above.
           </p>
         </div>
 
@@ -625,10 +522,6 @@ export const AddItem = () => {
           />
         </div>
       </section>
-
-      {/* -------------------------------- */}
-      {/* Actions */}
-      {/* -------------------------------- */}
 
       <div className="flex flex-col-reverse gap-3 border-t border-gray-300 pt-5 sm:flex-row sm:items-center sm:justify-end">
         <button
