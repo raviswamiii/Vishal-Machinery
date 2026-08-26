@@ -1,9 +1,40 @@
 import logo from "../assets/logo.png";
 import { PiUserCirclePlusLight } from "react-icons/pi";
-import { Plus } from "lucide-react";
+import { Check, Plus } from "lucide-react";
 import { AddItem } from "../components/AddItem";
+import { useState } from "react";
+import { ListItems } from "../components/ListItems";
+
+type Page = "addItem" | "listItems";
 
 export const Dashboard = () => {
+  const [activePage, setActivePage] = useState<Page>("addItem");
+
+  const menuItems = [
+    {
+      id: "addItem" as Page,
+      label: "Add Items",
+      icon: Plus,
+    },
+    {
+      id: "listItems" as Page,
+      label: "List Items",
+      icon: Check,
+    },
+  ];
+
+  const renderPage = () => {
+    switch (activePage) {
+      case "addItem":
+        return <AddItem />;
+
+      case "listItems":
+        return <ListItems />;
+
+      default:
+        return <AddItem />;
+    }
+  };
   return (
     <div className="p-2 md:px-10 h-screen flex flex-col overflow-hidden">
       {/* Header */}
@@ -34,17 +65,44 @@ export const Dashboard = () => {
       {/* Main Content */}
       <div className="flex flex-1 min-h-0">
         {/* Sidebar */}
-        <div className="border-r border-gray-300 py-4 h-full w-fit shrink-0 montserrat">
-          <div className="py-2 px-4 text-md font-semibold border border-r-0 border-gray-300 rounded-l-md flex items-center gap-3">
-            <Plus size={20} className="border rounded-full p-0.5" />
+        <div className="flex flex-col gap-2 border-r border-gray-300 py-4 h-full w-fit shrink-0 montserrat">
+          {menuItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = activePage === item.id;
 
-            <p className="hidden sm:block">Add Items</p>
-          </div>
+            return (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => setActivePage(item.id)}
+                className={`
+                py-2 px-4 text-md font-semibold
+                border border-r-0 border-gray-300
+                rounded-l-md
+                flex items-center gap-3
+                transition-all duration-200
+                text-left
+                ${
+                  isActive
+                    ? "bg-gray-100 text-black"
+                    : "bg-white text-gray-600 hover:bg-gray-50"
+                }
+              `}
+              >
+                <Icon
+                  size={20}
+                  className="border rounded-full p-0.5 shrink-0"
+                />
+
+                <p className="hidden sm:block">{item.label}</p>
+              </button>
+            );
+          })}
         </div>
 
         {/* Scrollable Content */}
         <div className="flex-1 min-w-0 min-h-0 overflow-y-auto bg-gray-50">
-          <AddItem />
+          {renderPage()}
         </div>
       </div>
     </div>
