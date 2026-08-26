@@ -2,17 +2,12 @@ import { Request, Response } from "express";
 import Product from "../models/productModel";
 import Category from "../models/categoryModel";
 import cloudinary from "../config/cloudinary";
+import mongoose from "mongoose";
 
 export const addProduct = async (req: Request, res: Response) => {
   try {
-    const {
-      name,
-      description,
-      price,
-      category,
-      productInfo,
-      productInfo2,
-    } = req.body;
+    const { name, description, price, category, productInfo, productInfo2 } =
+      req.body;
 
     // Validate required fields
     if (!name || !description || !price || !category) {
@@ -101,10 +96,7 @@ export const addProduct = async (req: Request, res: Response) => {
 
     return res.status(500).json({
       success: false,
-      message:
-        error instanceof Error
-          ? error.message
-          : "Internal server error",
+      message: error instanceof Error ? error.message : "Internal server error",
     });
   }
 };
@@ -122,10 +114,7 @@ export const getAllProducts = async (req: Request, res: Response) => {
 
     return res.status(500).json({
       success: false,
-      message:
-        error instanceof Error
-          ? error.message
-          : "Internal server error",
+      message: error instanceof Error ? error.message : "Internal server error",
     });
   }
 };
@@ -145,7 +134,7 @@ export const getProduct = async (req: Request, res: Response) => {
     // Fetch product from database
     const product = await Product.findById(productId).populate(
       "category",
-      "name"
+      "name",
     );
 
     if (!product) {
@@ -164,10 +153,165 @@ export const getProduct = async (req: Request, res: Response) => {
 
     return res.status(500).json({
       success: false,
+      message: error instanceof Error ? error.message : "Internal server error",
+    });
+  }
+};
+
+export const listProducts = async (req: Request, res: Response) => {
+  try {
+    const products = await Product.find()
+      .populate("category", "name")
+      .sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      success: true,
+      products,
+    });
+  } catch (error) {
+    console.error("List products error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch products",
+    });
+  }
+};
+
+export const updateProduct = async (
+  req: Request<{ id: string }>,
+  res: Response,
+) => {
+  try {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid product ID",
+      });
+    }
+
+    const {
+      name,
+      description,
+      price,
+    } = req.body;
+
+    const product = await Product.findById(id);
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found",
+      });
+    }
+
+    // Update ONLY fields that were sent
+    if (name !== undefined) {
+      if (
+        typeof name !== "string" ||
+        !name.trim()
+      ) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid product name",
+        });
+      }
+
+      product.name = name.trim();
+    }
+
+    if (description !== undefined) {
+      if (
+        typeof description !== "string" ||
+        !description.trim()
+      ) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid product description",
+        });
+      }
+
+      product.description = description.trim();
+    }
+
+    if (price !== undefined) {
+      const numericPrice = Number(price);
+
+      if (
+        Number.isNaN(numericPrice) ||
+        numericPrice < 0
+      ) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid price",
+        });
+      }
+
+      product.price = numericPrice;
+    }
+
+    const updatedProduct = await product.save();
+
+    await updatedProduct.populate(
+      "category",
+      "name",
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "Product updated successfully",
+      product: updatedProduct,
+    });
+  } catch (error) {
+    console.error("Update product error:", error);
+
+    return res.status(500).json({
+      success: false,
       message:
         error instanceof Error
           ? error.message
-          : "Internal server error",
+          : "Failed to update product",
+    });
+  }
+};
+
+export const deleteProduct = async (
+  req: Request<{ id: string }>,
+  res: Response,
+) => {
+  try {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid product ID",
+      });
+    }
+
+    const product = await Product.findById(id);
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found",
+      });
+    }
+
+    await Product.findByIdAndDelete(id);
+
+    return res.status(200).json({
+      success: true,
+      message: "Product deleted successfully",
+    });
+  } catch (error) {
+    console.error("Delete product error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to delete product",
     });
   }
 };
