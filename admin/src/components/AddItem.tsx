@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { backendUrl } from "../App";
 import { toast } from "react-toastify";
-import upload_area from "../assets/upload_area.png";
+import upload_area from "../Assets/upload_area.png";
 import { Plus, Trash2, ImagePlus } from "lucide-react";
 
 interface ProductInfo {

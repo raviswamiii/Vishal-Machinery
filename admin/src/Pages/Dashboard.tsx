@@ -1,4 +1,4 @@
-import logo from "../assets/Logo.png";
+import logo from "../Assets/Logo.png";
 import { PiUserCirclePlusLight } from "react-icons/pi";
 import { Check, Plus } from "lucide-react";
 import { AddItem } from "../components/AddItem";
