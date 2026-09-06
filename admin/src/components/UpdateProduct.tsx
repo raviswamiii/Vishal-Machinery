@@ -39,10 +39,102 @@ interface UpdateProductProps {
   onUpdated: (product: Product) => void;
 }
 
-export const UpdateProduct = ({
-  product,
-  onUpdated,
-}: UpdateProductProps) => {
+interface SpecificationTableProps {
+  data: ProductInfo[];
+  onAdd: () => void;
+  onUpdate: (index: number, field: "label" | "value", value: string) => void;
+  onRemove: (index: number) => void;
+  loading: boolean;
+}
+
+const SpecificationTable = ({
+  data,
+  onAdd,
+  onUpdate,
+  onRemove,
+  loading,
+}: SpecificationTableProps) => {
+  return (
+    <div className="overflow-hidden rounded-lg border border-gray-300">
+      {/* Header */}
+      <div className="hidden grid-cols-[1fr_1fr_44px] gap-3 bg-gray-100 px-3 py-3 text-xs font-bold uppercase tracking-wide text-gray-700 sm:grid">
+        <span>Specification</span>
+        <span>Value</span>
+        <span></span>
+      </div>
+
+      {/* Rows */}
+      <div>
+        {data.map((info, index) => (
+          <div
+            key={index}
+            className="grid grid-cols-1 gap-2 border-t border-gray-300 p-3 sm:grid-cols-[1fr_1fr_44px] sm:items-center sm:gap-3"
+          >
+            {/* Label */}
+            <div>
+              <label className="mb-1 block text-[11px] font-semibold text-gray-700 sm:hidden">
+                Specification
+              </label>
+
+              <input
+                type="text"
+                placeholder="Enter specification..."
+                value={info.label}
+                disabled={loading}
+                onChange={(e) => onUpdate(index, "label", e.target.value)}
+                className="w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/20 disabled:bg-gray-100"
+              />
+            </div>
+
+            {/* Value */}
+            <div>
+              <label className="mb-1 block text-[11px] font-semibold text-gray-700 sm:hidden">
+                Value
+              </label>
+
+              <input
+                type="text"
+                placeholder="Enter value..."
+                value={info.value}
+                disabled={loading}
+                onChange={(e) => onUpdate(index, "value", e.target.value)}
+                className="w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/20 disabled:bg-gray-100"
+              />
+            </div>
+
+            {/* Delete */}
+            <button
+              type="button"
+              disabled={loading}
+              onClick={() => onRemove(index)}
+              className="flex h-10 w-10 items-center justify-center rounded-md text-gray-500 transition hover:bg-red-50 hover:text-red-500 disabled:cursor-not-allowed disabled:opacity-50"
+              title="Remove specification"
+            >
+              <Trash2 size={17} />
+            </button>
+          </div>
+        ))}
+      </div>
+
+      {/* Add */}
+      <div className="border-t border-gray-300 bg-gray-50 p-3">
+        <button
+          type="button"
+          disabled={loading}
+          onClick={onAdd}
+          className="flex items-center gap-2 text-sm font-semibold text-gray-700 transition hover:text-black disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          <span className="flex h-6 w-6 items-center justify-center rounded-full border border-gray-400 bg-white">
+            <Plus size={14} />
+          </span>
+          Add specification
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export const UpdateProduct = ({ product, onUpdated }: UpdateProductProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   // Basic product information
@@ -240,24 +332,14 @@ export const UpdateProduct = ({
     }
 
     // Product Specifications
-    if (
-      specificationsChanged(
-        productInfo,
-        product.productInfo || [],
-      )
-    ) {
+    if (specificationsChanged(productInfo, product.productInfo || [])) {
       updateData.productInfo = productInfo.filter(
         (item) => item.label.trim() || item.value.trim(),
       );
     }
 
     // Additional Specifications
-    if (
-      specificationsChanged(
-        productInfo2,
-        product.productInfo2 || [],
-      )
-    ) {
+    if (specificationsChanged(productInfo2, product.productInfo2 || [])) {
       updateData.productInfo2 = productInfo2.filter(
         (item) => item.label.trim() || item.value.trim(),
       );
@@ -280,56 +362,36 @@ export const UpdateProduct = ({
       console.log("Update URL:", updateUrl);
       console.log("Update data:", updateData);
 
-      const response = await axios.put(
-        updateUrl,
-        updateData,
-        {
-          timeout: 10000,
-        },
-      );
+      const response = await axios.put(updateUrl, updateData, {
+        timeout: 10000,
+      });
 
       console.log("Update response:", response.data);
 
       if (response.data.success) {
-        toast.success(
-          response.data.message || "Product updated successfully",
-        );
+        toast.success(response.data.message || "Product updated successfully");
 
         onUpdated(response.data.product);
 
         setIsOpen(false);
       } else {
-        toast.error(
-          response.data.message || "Failed to update product",
-        );
+        toast.error(response.data.message || "Failed to update product");
       }
     } catch (error) {
       console.error("Update product error:", error);
 
       if (axios.isAxiosError(error)) {
-        console.error(
-          "Status:",
-          error.response?.status,
-        );
+        console.error("Status:", error.response?.status);
 
-        console.error(
-          "Response:",
-          error.response?.data,
-        );
+        console.error("Response:", error.response?.data);
 
-        console.error(
-          "URL:",
-          error.config?.url,
-        );
+        console.error("URL:", error.config?.url);
 
         if (error.code === "ECONNABORTED") {
-          toast.error(
-            "Request timed out. Check your backend server.",
-          );
+          toast.error("Request timed out. Check your backend server.");
         } else if (error.response) {
           toast.error(
-            error.response.data?.message ||
-              "Failed to update product",
+            error.response.data?.message || "Failed to update product",
           );
         } else {
           toast.error("Cannot connect to the server");
@@ -340,118 +402,6 @@ export const UpdateProduct = ({
     } finally {
       setLoading(false);
     }
-  };
-
-  // --------------------------------------------------
-  // Specification Table
-  // --------------------------------------------------
-
-  const SpecificationTable = ({
-    data,
-    onAdd,
-    onUpdate,
-    onRemove,
-  }: {
-    data: ProductInfo[];
-    onAdd: () => void;
-    onUpdate: (
-      index: number,
-      field: "label" | "value",
-      value: string,
-    ) => void;
-    onRemove: (index: number) => void;
-  }) => {
-    return (
-      <div className="overflow-hidden rounded-lg border border-gray-300">
-        {/* Header */}
-        <div className="hidden grid-cols-[1fr_1fr_44px] gap-3 bg-gray-100 px-3 py-3 text-xs font-bold uppercase tracking-wide text-gray-700 sm:grid">
-          <span>Specification</span>
-          <span>Value</span>
-          <span></span>
-        </div>
-
-        {/* Rows */}
-        <div>
-          {data.map((info, index) => (
-            <div
-              key={index}
-              className="grid grid-cols-1 gap-2 border-t border-gray-300 p-3 sm:grid-cols-[1fr_1fr_44px] sm:items-center sm:gap-3"
-            >
-              {/* Label */}
-              <div>
-                <label className="mb-1 block text-[11px] font-semibold text-gray-700 sm:hidden">
-                  Specification
-                </label>
-
-                <input
-                  type="text"
-                  placeholder="Enter specification..."
-                  value={info.label}
-                  disabled={loading}
-                  onChange={(e) =>
-                    onUpdate(
-                      index,
-                      "label",
-                      e.target.value,
-                    )
-                  }
-                  className="w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/20 disabled:bg-gray-100"
-                />
-              </div>
-
-              {/* Value */}
-              <div>
-                <label className="mb-1 block text-[11px] font-semibold text-gray-700 sm:hidden">
-                  Value
-                </label>
-
-                <input
-                  type="text"
-                  placeholder="Enter value..."
-                  value={info.value}
-                  disabled={loading}
-                  onChange={(e) =>
-                    onUpdate(
-                      index,
-                      "value",
-                      e.target.value,
-                    )
-                  }
-                  className="w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/20 disabled:bg-gray-100"
-                />
-              </div>
-
-              {/* Delete */}
-              <button
-                type="button"
-                disabled={loading}
-                onClick={() => onRemove(index)}
-                className="flex h-10 w-10 items-center justify-center rounded-md text-gray-500 transition hover:bg-red-50 hover:text-red-500 disabled:cursor-not-allowed disabled:opacity-50"
-                title="Remove specification"
-              >
-                <Trash2 size={17} />
-              </button>
-            </div>
-          ))}
-        </div>
-
-        {/* Add */}
-        <div className="border-t border-gray-300 bg-gray-50 p-3">
-          <button
-            type="button"
-            disabled={loading}
-            onClick={onAdd}
-            className="flex items-center gap-2 text-sm font-semibold text-gray-700 transition hover:text-black disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            <span className="flex h-6 w-6 items-center justify-center rounded-full border border-gray-400 bg-white">
-              <Plus size={14} />
-            </span>
-
-            Add specification
-          </button>
-        </div>
-      </div>
-    );
   };
 
   // --------------------------------------------------
@@ -474,7 +424,6 @@ export const UpdateProduct = ({
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
           <div className="flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-xl bg-white shadow-xl">
-
             {/* Header */}
             <div className="sticky top-0 z-10 flex items-center justify-between border-b border-gray-200 bg-white px-6 py-4">
               <div>
@@ -528,9 +477,7 @@ export const UpdateProduct = ({
                       id="product-name"
                       type="text"
                       value={name}
-                      onChange={(e) =>
-                        setName(e.target.value)
-                      }
+                      onChange={(e) => setName(e.target.value)}
                       required
                       disabled={loading}
                       className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-gray-500 disabled:bg-gray-100"
@@ -549,9 +496,7 @@ export const UpdateProduct = ({
                     <textarea
                       id="product-description"
                       value={description}
-                      onChange={(e) =>
-                        setDescription(e.target.value)
-                      }
+                      onChange={(e) => setDescription(e.target.value)}
                       required
                       rows={4}
                       disabled={loading}
@@ -572,9 +517,7 @@ export const UpdateProduct = ({
                       id="product-price"
                       type="number"
                       value={price}
-                      onChange={(e) =>
-                        setPrice(Number(e.target.value))
-                      }
+                      onChange={(e) => setPrice(Number(e.target.value))}
                       min={0}
                       required
                       disabled={loading}
@@ -595,8 +538,7 @@ export const UpdateProduct = ({
                   </h3>
 
                   <p className="mt-1 text-sm text-gray-500">
-                    Update the technical specifications
-                    of this product.
+                    Update the technical specifications of this product.
                   </p>
                 </div>
 
@@ -606,6 +548,7 @@ export const UpdateProduct = ({
                     onAdd={addProductInfo}
                     onUpdate={updateProductInfo}
                     onRemove={removeProductInfo}
+                    loading={loading}
                   />
                 </div>
               </section>
@@ -631,6 +574,7 @@ export const UpdateProduct = ({
                     onAdd={addProductInfo2}
                     onUpdate={updateProductInfo2}
                     onRemove={removeProductInfo2}
+                    loading={loading}
                   />
                 </div>
               </section>
@@ -658,9 +602,7 @@ export const UpdateProduct = ({
                     <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
                   )}
 
-                  {loading
-                    ? "Updating..."
-                    : "Update Product"}
+                  {loading ? "Updating..." : "Update Product"}
                 </button>
               </div>
             </form>
