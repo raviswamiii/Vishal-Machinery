@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import Product from "../models/productModel";
-import Category from "../models/categoryModel";
-import cloudinary from "../config/cloudinary";
+import Product from "../models/productModel.js";
+import Category from "../models/categoryModel.js";
+import cloudinary from "../config/cloudinary.js";
 import mongoose from "mongoose";
 
 export const addProduct = async (req: Request, res: Response) => {
@@ -185,6 +185,9 @@ export const updateProduct = async (
   try {
     const { id } = req.params;
 
+    // =========================
+    // Validate Product ID
+    // =========================
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({
         success: false,
@@ -192,12 +195,11 @@ export const updateProduct = async (
       });
     }
 
-    const {
-      name,
-      description,
-      price,
-    } = req.body;
+    const { name, description, price, productInfo, productInfo2 } = req.body;
 
+    // =========================
+    // Find Product
+    // =========================
     const product = await Product.findById(id);
 
     if (!product) {
@@ -207,12 +209,11 @@ export const updateProduct = async (
       });
     }
 
-    // Update ONLY fields that were sent
+    // =========================
+    // Update Name
+    // =========================
     if (name !== undefined) {
-      if (
-        typeof name !== "string" ||
-        !name.trim()
-      ) {
+      if (typeof name !== "string" || !name.trim()) {
         return res.status(400).json({
           success: false,
           message: "Invalid product name",
@@ -222,11 +223,11 @@ export const updateProduct = async (
       product.name = name.trim();
     }
 
+    // =========================
+    // Update Description
+    // =========================
     if (description !== undefined) {
-      if (
-        typeof description !== "string" ||
-        !description.trim()
-      ) {
+      if (typeof description !== "string" || !description.trim()) {
         return res.status(400).json({
           success: false,
           message: "Invalid product description",
@@ -236,13 +237,13 @@ export const updateProduct = async (
       product.description = description.trim();
     }
 
+    // =========================
+    // Update Price
+    // =========================
     if (price !== undefined) {
       const numericPrice = Number(price);
 
-      if (
-        Number.isNaN(numericPrice) ||
-        numericPrice < 0
-      ) {
+      if (Number.isNaN(numericPrice) || numericPrice < 0) {
         return res.status(400).json({
           success: false,
           message: "Invalid price",
@@ -252,13 +253,114 @@ export const updateProduct = async (
       product.price = numericPrice;
     }
 
+    // =========================
+    // Update Product Specifications
+    // =========================
+    if (productInfo !== undefined) {
+      let parsedProductInfo;
+
+      try {
+        parsedProductInfo =
+          typeof productInfo === "string"
+            ? JSON.parse(productInfo)
+            : productInfo;
+      } catch {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid productInfo JSON",
+        });
+      }
+
+      if (!Array.isArray(parsedProductInfo)) {
+        return res.status(400).json({
+          success: false,
+          message: "Product specifications must be an array",
+        });
+      }
+
+      const isValid = parsedProductInfo.every(
+        (item) =>
+          item &&
+          typeof item.label === "string" &&
+          typeof item.value === "string",
+      );
+
+      if (!isValid) {
+        return res.status(400).json({
+          success: false,
+          message: "Each product specification must contain a label and value",
+        });
+      }
+
+      product.productInfo = parsedProductInfo
+        .map((item) => ({
+          label: item.label.trim(),
+          value: item.value.trim(),
+        }))
+        .filter((item) => item.label && item.value);
+    }
+
+    // =========================
+    // Update Additional Specifications
+    // =========================
+    if (productInfo2 !== undefined) {
+      let parsedProductInfo2;
+
+      try {
+        parsedProductInfo2 =
+          typeof productInfo2 === "string"
+            ? JSON.parse(productInfo2)
+            : productInfo2;
+      } catch {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid productInfo2 JSON",
+        });
+      }
+
+      if (!Array.isArray(parsedProductInfo2)) {
+        return res.status(400).json({
+          success: false,
+          message: "Additional specifications must be an array",
+        });
+      }
+
+      const isValid = parsedProductInfo2.every(
+        (item) =>
+          item &&
+          typeof item.label === "string" &&
+          typeof item.value === "string",
+      );
+
+      if (!isValid) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Each additional specification must contain a label and value",
+        });
+      }
+
+      product.productInfo2 = parsedProductInfo2
+        .map((item) => ({
+          label: item.label.trim(),
+          value: item.value.trim(),
+        }))
+        .filter((item) => item.label && item.value);
+    }
+
+    // =========================
+    // Save Product
+    // =========================
     const updatedProduct = await product.save();
 
-    await updatedProduct.populate(
-      "category",
-      "name",
-    );
+    // =========================
+    // Populate Category
+    // =========================
+    await updatedProduct.populate("category", "name");
 
+    // =========================
+    // Response
+    // =========================
     return res.status(200).json({
       success: true,
       message: "Product updated successfully",
@@ -270,9 +372,7 @@ export const updateProduct = async (
     return res.status(500).json({
       success: false,
       message:
-        error instanceof Error
-          ? error.message
-          : "Failed to update product",
+        error instanceof Error ? error.message : "Failed to update product",
     });
   }
 };
