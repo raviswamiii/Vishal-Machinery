@@ -32,7 +32,7 @@ export const Product = () => {
         <div className="flex-1 min-h-0">
           <img
             src={product?.image1 || PackagingMachine}
-            className="bg-gray-200 h-full w-full object-contain"
+            className="bg-gray-200 p-[4vw] h-full w-full object-contain"
             alt="Packaging Machine"
           />
         </div>
@@ -41,25 +41,25 @@ export const Product = () => {
         <div className="flex flex-row h-[17vh] w-full gap-2 sm:flex-col sm:h-full sm:w-[17vw] sm:shrink-0 sm:gap-2">
           <img
             src={product?.image1 || PackagingMachine}
-            className="flex-1 min-w-0 min-h-0 bg-gray-200 object-contain"
+            className="flex-1 min-w-0 min-h-0 bg-gray-200 object-contain p-[2vw] md:p-[1vw]"
             alt="Packaging Machine"
           />
 
           <img
             src={product?.image2 || PackagingMachine}
-            className="flex-1 min-w-0 min-h-0 bg-gray-200 object-contain"
+            className="flex-1 min-w-0 min-h-0 bg-gray-200 object-contain p-[2vw] md:p-[1vw]"
             alt="Packaging Machine"
           />
 
           <img
             src={product?.image3 || PackagingMachine}
-            className="flex-1 min-w-0 min-h-0 bg-gray-200 object-contain"
+            className="flex-1 min-w-0 min-h-0 bg-gray-200 object-contain p-[2vw] md:p-[1vw]"
             alt="Packaging Machine"
           />
 
           <img
             src={product?.image4 || PackagingMachine}
-            className="flex-1 min-w-0 min-h-0 bg-gray-200 object-contain"
+            className="flex-1 min-w-0 min-h-0 bg-gray-200 object-contain p-[2vw] md:p-[1vw]"
             alt="Packaging Machine"
           />
         </div>
