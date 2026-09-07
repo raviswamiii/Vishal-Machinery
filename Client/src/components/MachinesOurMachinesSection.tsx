@@ -26,7 +26,9 @@ export const MachinesOurMachinesSection = () => {
 
   const fetchAllProducts = async () => {
     try {
-      const response = await axios.get(`${backendUrl}/api/products/getAllProducts`);
+      const response = await axios.get(
+        `${backendUrl}/api/products/getAllProducts`,
+      );
 
       setAllProducts(response.data.products);
     } catch (error) {
@@ -36,7 +38,7 @@ export const MachinesOurMachinesSection = () => {
 
   useEffect(() => {
     fetchAllProducts();
-  }, []);
+  }, [backendUrl]);
 
   // Group products according to category
   const productsByCategory = allProducts.reduce(
@@ -88,7 +90,7 @@ export const MachinesOurMachinesSection = () => {
           </h1>
 
           {/* Products */}
-          <div className="flex overflow-x-auto no-scrollbar md:grid md:grid-cols-3 md:overflow-visible gap-x-3 sm:gap-[2vw]">
+          <div className="flex overflow-x-auto no-scrollbar h-55 md:h-full md:grid md:grid-cols-3 md:overflow-visible gap-x-3 sm:gap-[2vw]">
             {products.map((product) => (
               <div
                 key={product._id}
@@ -96,18 +98,18 @@ export const MachinesOurMachinesSection = () => {
               >
                 {/* Image */}
                 <img
-                  className="h-55 w-full object-contain"
+                  className="h-55 min-w-[40vw] sm:min-w-[30vw] p-4 object-contain"
                   src={product.image1}
                   alt={product.name}
                 />
 
                 {/* Product information */}
                 <div className="px-[2vw] md:pb-[2vw] lg:px-[4vw] w-full">
-                  <h1 className="text-md font-bold montserrat mb-2">
+                  <h1 className="text-md font-bold montserrat mb-2 line-clamp-2">
                     {product.name}
                   </h1>
 
-                  <p className="text-sm text-gray-800 mb-2">
+                  <p className="text-sm text-gray-800 mb-2 line-clamp-3">
                     {product.description}
                   </p>
 
