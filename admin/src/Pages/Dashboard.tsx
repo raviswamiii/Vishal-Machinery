@@ -24,7 +24,7 @@ export const Dashboard = () => {
     },
     {
       id: "getAllUsers" as Page,
-      label: "Get All Users",
+      label: "All Users",
       icon: User,
     },
   ];
