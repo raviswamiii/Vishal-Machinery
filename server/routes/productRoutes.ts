@@ -7,6 +7,7 @@ import {
   updateProduct,
   deleteProduct,
   getFeaturedProducts,
+  getCategorySuggestions,
 } from "../controllers/productController.js";
 import upload from "../middleware/multer.js";
 
@@ -28,5 +29,6 @@ productRouter.get("/list", listProducts);
 productRouter.put("/update/:id", updateProduct);
 productRouter.delete("/delete/:id", deleteProduct);
 productRouter.get("/featured", getFeaturedProducts);
+productRouter.get("/suggestions", getCategorySuggestions);
 
 export default productRouter;

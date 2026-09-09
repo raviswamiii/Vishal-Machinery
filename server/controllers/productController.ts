@@ -158,6 +158,44 @@ export const getProduct = async (req: Request, res: Response) => {
   }
 };
 
+export const getCategorySuggestions = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const search = (req.query.search as string)?.trim() || "";
+
+    if (!search) {
+      res.status(200).json({
+        success: true,
+        categories: [],
+      });
+      return;
+    }
+
+    const categories = await Category.find({
+      name: {
+        $regex: search,
+        $options: "i",
+      },
+    })
+      .select("_id name")
+      .limit(10);
+
+    res.status(200).json({
+      success: true,
+      categories,
+    });
+  } catch (error) {
+    console.error("Error fetching category suggestions:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch category suggestions",
+    });
+  }
+};
+
 export const listProducts = async (req: Request, res: Response) => {
   try {
     const products = await Product.find()

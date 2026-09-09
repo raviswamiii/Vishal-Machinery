@@ -97,6 +97,11 @@ const SpecificationTable = ({
   );
 };
 
+interface Category {
+  _id: string;
+  name: string;
+}
+
 export const AddItem = () => {
   // Images
   const [image1, setImage1] = useState<File | null>(null);
@@ -109,6 +114,13 @@ export const AddItem = () => {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
+  const [categorySuggestions, setCategorySuggestions] = useState<Category[]>(
+    [],
+  );
+
+  const [showCategorySuggestions, setShowCategorySuggestions] = useState(false);
+
+  const [categoryLoading, setCategoryLoading] = useState(false);
 
   // Loading
   const [isLoading, setIsLoading] = useState(false);
@@ -330,6 +342,43 @@ export const AddItem = () => {
     );
   };
 
+  const searchCategories = async (value: string) => {
+    setCategory(value);
+
+    if (!value.trim()) {
+      setCategorySuggestions([]);
+      setShowCategorySuggestions(false);
+      return;
+    }
+
+    try {
+      setCategoryLoading(true);
+
+      const response = await axios.get(
+        `${backendUrl}/api/products/suggestions`,
+        {
+          params: {
+            search: value,
+          },
+        },
+      );
+
+      setCategorySuggestions(response.data.categories);
+      setShowCategorySuggestions(true);
+    } catch (error) {
+      console.error("Error searching categories:", error);
+      setCategorySuggestions([]);
+    } finally {
+      setCategoryLoading(false);
+    }
+  };
+
+  const selectCategory = (selectedCategory: Category) => {
+    setCategory(selectedCategory.name);
+    setShowCategorySuggestions(false);
+    setCategorySuggestions([]);
+  };
+
   return (
     <form
       onSubmit={onSubmitHandler}
@@ -374,7 +423,7 @@ export const AddItem = () => {
           </div>
 
           {/* Category */}
-          <div>
+          <div className="relative">
             <label className="mb-2 block text-sm font-semibold text-gray-900">
               Category
             </label>
@@ -382,11 +431,60 @@ export const AddItem = () => {
             <input
               type="text"
               value={category}
-              onChange={(e) => setCategory(e.target.value)}
+              onChange={(e) => searchCategories(e.target.value)}
+              onFocus={() => {
+                if (category.trim()) {
+                  setShowCategorySuggestions(true);
+                }
+              }}
+              onBlur={() => {
+                // Small delay so clicking a suggestion works
+                setTimeout(() => {
+                  setShowCategorySuggestions(false);
+                }, 150);
+              }}
               placeholder="Enter category..."
               required
+              autoComplete="off"
               className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/20"
             />
+
+            {/* Loading */}
+            {categoryLoading && (
+              <div className="absolute right-3 top-10.5">
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-yellow-400" />
+              </div>
+            )}
+
+            {/* Suggestions */}
+            {showCategorySuggestions && categorySuggestions.length > 0 && (
+              <div className="absolute left-0 right-0 top-full z-50 mt-1 overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg">
+                {categorySuggestions.map((item) => (
+                  <button
+                    key={item._id}
+                    type="button"
+                    onMouseDown={() => selectCategory(item)}
+                    className="flex w-full items-center px-3 py-3 text-left text-sm text-gray-700 transition hover:bg-yellow-50"
+                  >
+                    <span>{item.name}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* No matching category */}
+            {showCategorySuggestions &&
+              !categoryLoading &&
+              category.trim() &&
+              categorySuggestions.length === 0 && (
+                <div className="absolute left-0 right-0 top-full z-50 mt-1 rounded-lg border border-gray-200 bg-white px-3 py-3 text-sm text-gray-500 shadow-lg">
+                  No existing category found.
+                  <span className="font-semibold text-gray-700">
+                    {" "}
+                    You can create this category.
+                  </span>
+                </div>
+              )}
           </div>
 
           {/* Price */}
