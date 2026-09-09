@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import PackagingMachine from "../assets/Products/PackagingMachine.png";
 import axios from "axios";
 
 export const Product = () => {
@@ -31,7 +30,7 @@ export const Product = () => {
         {/* Main Image */}
         <div className="flex-1 min-h-0">
           <img
-            src={product?.image1 || PackagingMachine}
+            src={product?.image1}
             className="bg-gray-200 p-[4vw] h-full w-full object-contain"
             alt="Packaging Machine"
           />
@@ -40,25 +39,25 @@ export const Product = () => {
         {/* Thumbnail Images */}
         <div className="flex flex-row h-[17vh] w-full gap-2 sm:flex-col sm:h-full sm:w-[17vw] sm:shrink-0 sm:gap-2">
           <img
-            src={product?.image1 || PackagingMachine}
+            src={product?.image1}
             className="flex-1 min-w-0 min-h-0 bg-gray-200 object-contain p-[2vw] md:p-[1vw]"
             alt="Packaging Machine"
           />
 
           <img
-            src={product?.image2 || PackagingMachine}
+            src={product?.image2}
             className="flex-1 min-w-0 min-h-0 bg-gray-200 object-contain p-[2vw] md:p-[1vw]"
             alt="Packaging Machine"
           />
 
           <img
-            src={product?.image3 || PackagingMachine}
+            src={product?.image3}
             className="flex-1 min-w-0 min-h-0 bg-gray-200 object-contain p-[2vw] md:p-[1vw]"
             alt="Packaging Machine"
           />
 
           <img
-            src={product?.image4 || PackagingMachine}
+            src={product?.image4}
             className="flex-1 min-w-0 min-h-0 bg-gray-200 object-contain p-[2vw] md:p-[1vw]"
             alt="Packaging Machine"
           />
