@@ -5,6 +5,7 @@ import { MdOutlineSecurity } from "react-icons/md";
 import { GrSuse } from "react-icons/gr";
 import { MdOutlineSlowMotionVideo } from "react-icons/md";
 import { RiCameraLensFill } from "react-icons/ri";
+import { Link } from "react-router-dom";
 
 const bottomBar = [
   { icon: CiSettings, lable: "PRECISION ENGINEERED" },
@@ -35,10 +36,10 @@ export const Hero = () => {
           </p>
 
           <div className="flex flex-col gap-3 mt-2">
-            <button className="bg-yellow-400 text-black text-xs font-extrabold rounded-sm flex justify-center items-center gap-2 py-4 px-[2vw] sm:w-[75%] md:w-[65%]">
+            <Link to="/machines" className="bg-yellow-400 text-black text-xs font-extrabold rounded-sm flex justify-center items-center gap-2 py-4 px-[2vw] sm:w-[75%] md:w-[65%]">
               <RiCameraLensFill className="text-xl" />
               <span>EXPLORE MACHINES</span>
-            </button>
+            </Link>
 
             <button className="bg-black text-white border border-gray-100 text-xs font-bold rounded-sm flex justify-center items-center gap-2 py-4 px-[2vw] sm:w-[75%] md:w-[65%]">
               <MdOutlineSlowMotionVideo className="text-xl" />

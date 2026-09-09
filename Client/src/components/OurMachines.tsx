@@ -1,5 +1,6 @@
 import PackagingMachine from "../assets/Products/PackagingMachine.png";
 import { GoArrowRight } from "react-icons/go";
+import { Link } from "react-router-dom";
 
 const products = [1, 2, 3, 4, 5, 6];
 
@@ -52,10 +53,13 @@ export const OurMachines = () => {
         ))}
       </div>
 
-      <button className="montserrat border border-gray-600 font-bold text-sm py-4 md:px-4 rounded-sm md:absolute md:right-[10vw] md:top-[21vh]">
+      <Link
+        to="/machines"
+        className="montserrat flex justify-center border border-gray-600 font-bold text-sm py-4  rounded-sm md:absolute md:right-[10vw] md:top-[21vh]"
+      >
         VIEW ALL MACHINES
         <GoArrowRight className="text-lg inline-block ml-4" />
-      </button>
+      </Link>
     </div>
   );
 };

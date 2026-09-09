@@ -24,27 +24,6 @@ const reasons = [
     title: "CUSTOMIZED SOLUTIONS",
     description: "Tailored solutions to meet your unique packaging needs.",
   },
-  {
-    icon: RiBox3Fill,
-    title: "CUSTOMIZED SOLUTIONS",
-    description: "Tailored solutions to meet your unique packaging needs.",
-  },
-  {
-    icon: RiBox3Fill,
-    title: "CUSTOMIZED SOLUTIONS",
-    description: "Tailored solutions to meet your unique packaging needs.",
-  },
-  {
-    icon: RiBox3Fill,
-    title: "CUSTOMIZED SOLUTIONS",
-    description: "Tailored solutions to meet your unique packaging needs.",
-  },
-  {
-    icon: RiBox3Fill,
-    title: "CUSTOMIZED SOLUTIONS",
-    description: "Tailored solutions to meet your unique packaging needs.",
-  },
-  
 ];
 
 export const WhyChooseUs = () => {
