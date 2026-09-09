@@ -3,6 +3,7 @@ import express from "express";
 import databaseConnection from "./config/mongodb.js";
 import userRouter from "./routes/userRoutes.js";
 import productRouter from "./routes/productRoutes.js";
+import adminRouter from "./routes/adminRoutes.js";
 import cors from "cors";
 
 databaseConnection();
@@ -34,6 +35,7 @@ app.use(
 
 app.use("/api/users", userRouter);
 app.use("/api/products", productRouter);
+app.use("/api/admin", adminRouter);
 
 app.get("/", (req, res) => {
   res.status(200).json({

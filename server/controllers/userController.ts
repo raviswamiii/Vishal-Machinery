@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import validator from "validator";
-import userModel from "../models/userModel";
+import userModel from "../models/userModel.js";
 import { Request, Response } from "express";
 
 const JWT_SECRET = process.env.JWT_SECRET;

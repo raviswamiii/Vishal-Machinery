@@ -1,11 +1,12 @@
 import logo from "../Assets/Logo.png";
 import { PiUserCirclePlusLight } from "react-icons/pi";
-import { Check, Plus } from "lucide-react";
+import { Check, Plus, User } from "lucide-react";
 import { AddItem } from "../components/AddItem";
 import { useState } from "react";
 import { ListItems } from "../components/ListItems";
+import { GetAllUsers } from "../components/GetAllUsers";
 
-type Page = "addItem" | "listItems";
+type Page = "addItem" | "listItems" | "getAllUsers";
 
 export const Dashboard = () => {
   const [activePage, setActivePage] = useState<Page>("addItem");
@@ -21,6 +22,11 @@ export const Dashboard = () => {
       label: "List Items",
       icon: Check,
     },
+    {
+      id: "getAllUsers" as Page,
+      label: "Get All Users",
+      icon: User,
+    },
   ];
 
   const renderPage = () => {
@@ -30,6 +36,9 @@ export const Dashboard = () => {
 
       case "listItems":
         return <ListItems />;
+
+      case "getAllUsers":
+        return <GetAllUsers />;
 
       default:
         return <AddItem />;
