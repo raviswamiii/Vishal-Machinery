@@ -415,3 +415,32 @@ export const deleteProduct = async (
     });
   }
 };
+
+export const getFeaturedProducts = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const limit = Math.max(
+      6,
+      parseInt(req.query.limit as string) || 6
+    );
+
+    const products = await Product.find()
+      .populate("category", "name")
+      .sort({ createdAt: -1 })
+      .limit(limit);
+
+    res.status(200).json({
+      success: true,
+      products,
+    });
+  } catch (error) {
+    console.error("Error fetching featured products:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch featured products",
+    });
+  }
+};

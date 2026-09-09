@@ -6,8 +6,9 @@ import {
   listProducts,
   updateProduct,
   deleteProduct,
-} from "../controllers/productController";
-import upload from "../middleware/multer";
+  getFeaturedProducts,
+} from "../controllers/productController.js";
+import upload from "../middleware/multer.js";
 
 const productRouter = express.Router();
 
@@ -26,5 +27,6 @@ productRouter.get("/getProduct/:productId", getProduct);
 productRouter.get("/list", listProducts);
 productRouter.put("/update/:id", updateProduct);
 productRouter.delete("/delete/:id", deleteProduct);
+productRouter.get("/featured", getFeaturedProducts);
 
 export default productRouter;
