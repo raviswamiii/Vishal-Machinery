@@ -11,7 +11,6 @@ import {
   LogIn,
   ArrowLeft,
 } from "lucide-react";
-import { useUserContext } from "../context/userContext";
 
 export const Registration = () => {
   const [name, setName] = useState("");
@@ -24,7 +23,6 @@ export const Registration = () => {
 
   const backendURL = import.meta.env.VITE_BACKEND_URL;
   const navigate = useNavigate();
-  const { setToken } = useUserContext();
 
   const onSubmitHandler = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
@@ -38,16 +36,18 @@ export const Registration = () => {
 
     try {
       const response = await axios.post(`${backendURL}/api/users/register`, {
-        name,
-        number,
-        email,
+        name: name.trim(),
+        number: number.trim(),
+        email: email.trim(),
         password,
       });
 
       if (response.data?.success) {
-        localStorage.setItem("token", response.data.token);
-        setToken(response.data.token);
-        navigate("/");
+        navigate("/verifyEmail", {
+          state: {
+            email: response.data.email,
+          },
+        });
       } else {
         setError(response.data?.message || "Registration failed.");
       }

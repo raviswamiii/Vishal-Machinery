@@ -25,6 +25,37 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+
+    isEmailVerified: {
+      type: Boolean,
+      default: false,
+    },
+
+    emailVerificationOTP: {
+      type: String,
+    },
+
+    emailVerificationOTPExpires: {
+      type: Date,
+    },
+
+    emailVerificationAttempts: {
+      type: Number,
+      default: 0,
+    },
+
+    emailVerificationLastSentAt: {
+      type: Date,
+    },
+
+    emailVerificationResendCount: {
+      type: Number,
+      default: 0,
+    },
+
+    emailVerificationResendWindowStart: {
+      type: Date,
+    },
   },
   { timestamps: true },
 );

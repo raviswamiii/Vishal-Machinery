@@ -39,7 +39,22 @@ export const Login = () => {
         setError(response.data?.message || "Login failed.");
       }
     } catch (error: any) {
-      setError(error.response?.data?.message || "Something went wrong.");
+      const responseData = error.response?.data;
+
+      if (
+        error.response?.status === 403 &&
+        responseData?.emailVerified === false
+      ) {
+        navigate("/verifyEmail", {
+          state: {
+            email: responseData.email,
+          },
+        });
+
+        return;
+      }
+
+      setError(responseData?.message || "Something went wrong.");
     } finally {
       setLoading(false);
     }
