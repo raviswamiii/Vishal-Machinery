@@ -1,10 +1,15 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useUserContext } from "../context/userContext";
+import { useNavigate } from "react-router-dom";
 
 export const Product = () => {
   const [product, setProduct] = useState<any>(null);
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const productId = window.location.pathname.split("/").pop();
+
+  const navigate = useNavigate();
+  const { token } = useUserContext();
 
   const fetchProduct = async () => {
     try {
@@ -23,6 +28,13 @@ export const Product = () => {
   useEffect(() => {
     fetchProduct();
   }, []);
+
+  const handleGetQuote = () => {
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+  };
 
   return (
     <div className="md:px-10">
@@ -73,6 +85,14 @@ export const Product = () => {
           <h1 className="text-xl font-bold montserrat">{product?.name}</h1>
 
           <p className="text-sm">{product?.description}</p>
+
+          <button
+            type="button"
+            className="mt-3 w-full sm:w-fit px-8 py-3 bg-[#ffc400] hover:bg-[#ffd333] text-black font-semibold rounded-md transition duration-200"
+            onClick={handleGetQuote}
+          >
+            Get a Quote
+          </button>
         </div>
 
         <div>
