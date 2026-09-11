@@ -10,15 +10,13 @@ import { Login } from "./components/Login";
 import { Registration } from "./components/Registration";
 import { SideBar } from "./components/SideBar";
 import { Product } from "./components/Product";
-import { VerifyEmail } from "./pages/VerifyEmail";
 
 export const App = () => {
   const location = useLocation();
 
   const hideNavbarAndFooter =
     location.pathname === "/login" ||
-    location.pathname === "/register" ||
-    location.pathname === "/verifyEmail";
+    location.pathname === "/register";
 
   return (
     <>
@@ -34,7 +32,6 @@ export const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Registration />} />
         <Route path="/product/:productId" element={<Product />} />
-        <Route path="/verifyEmail" element={<VerifyEmail />} />
       </Routes>
 
       {!hideNavbarAndFooter && <Footer />}
