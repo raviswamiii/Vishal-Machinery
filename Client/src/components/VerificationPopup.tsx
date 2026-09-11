@@ -1,23 +1,29 @@
 import { useEffect, useState } from "react";
 import { X, ShieldCheck } from "lucide-react";
+import axios from "axios";
 
 interface VerificationPopupProps {
   type: "email" | "whatsapp";
   value: string;
+  verificationToken: string;
   onClose: () => void;
-  onVerified: () => void;
+  onVerified: (verifiedToken: string) => void;
+  onResendToken: (newToken: string) => void;
 }
 
 export const VerificationPopup = ({
   type,
   value,
+  verificationToken,
   onClose,
   onVerified,
+  onResendToken,
 }: VerificationPopupProps) => {
   const [otp, setOtp] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [timer, setTimer] = useState(30);
+  const backendURL = import.meta.env.VITE_BACKEND_URL;
 
   const isEmail = type === "email";
 
@@ -46,55 +52,107 @@ export const VerificationPopup = ({
       return;
     }
 
+    if (!verificationToken) {
+      setError("Verification session expired. Please request a new OTP.");
+      return;
+    }
+
     setLoading(true);
 
     try {
-      /*
-       * Backend verification will be connected here.
-       *
-       * Example later:
-       *
-       * Email:
-       * POST /api/users/verify-email
-       *
-       * WhatsApp:
-       * POST /api/users/verify-whatsapp
-       */
+      let response;
 
-      console.log({
-        type,
-        value,
-        otp,
-      });
+      if (isEmail) {
+        response = await axios.post(
+          `${backendURL}/api/users/verify-email-otp`,
+          {
+            email: value.trim(),
+            otp,
+            verificationToken,
+          },
+        );
+      } else {
+        response = await axios.post(
+          `${backendURL}/api/users/verify-whatsapp-otp`,
+          {
+            number: value.trim(),
+            otp,
+            verificationToken,
+          },
+        );
+      }
 
-      /*
-       * Temporary frontend success.
-       *
-       * IMPORTANT:
-       * We will remove this when backend OTP verification
-       * is connected.
-       */
-      onVerified();
-      onClose();
-    } catch (error) {
-      console.error(error);
-      setError("Verification failed. Please try again.");
+      if (response.data?.success && response.data?.verifiedToken) {
+        // Send the verified proof token back to Registration.tsx
+        onVerified(response.data.verifiedToken);
+      } else {
+        setError(
+          response.data?.message ||
+            "Invalid verification code. Please try again.",
+        );
+      }
+    } catch (error: any) {
+      console.error("OTP verification error:", error);
+
+      setError(
+        error.response?.data?.message ||
+          "Verification failed. Please try again.",
+      );
     } finally {
       setLoading(false);
     }
   };
 
-  const handleResend = () => {
-    if (timer > 0) return;
+  const handleResend = async () => {
+    if (timer > 0 || loading) return;
 
-    setOtp("");
     setError("");
-    setTimer(30);
+    setOtp("");
+    setLoading(true);
 
-    /*
-     * Backend resend OTP API will be connected here later.
-     */
-    console.log("Resend OTP:", type, value);
+    try {
+      let response;
+
+      if (isEmail) {
+        response = await axios.post(
+          `${backendURL}/api/users/resend-email-otp`,
+          {
+            email: value.trim(),
+            verificationToken,
+          },
+        );
+      } else {
+        response = await axios.post(
+          `${backendURL}/api/users/resend-whatsapp-otp`,
+          {
+            number: value.trim(),
+            verificationToken,
+          },
+        );
+      }
+
+      if (response.data?.success && response.data?.verificationToken) {
+        // Replace the old OTP token with the new one
+        onResendToken(response.data.verificationToken);
+
+        // Start resend cooldown again
+        setTimer(30);
+
+        setError("");
+      } else {
+        setError(
+          response.data?.message || "Unable to resend verification code.",
+        );
+      }
+    } catch (error: any) {
+      console.error("Resend OTP error:", error);
+
+      setError(
+        error.response?.data?.message || "Unable to resend verification code.",
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

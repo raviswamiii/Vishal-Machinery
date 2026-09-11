@@ -23,9 +23,16 @@ export const Registration = () => {
 
   const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [isWhatsappVerified, setIsWhatsappVerified] = useState(false);
+
+  const [emailVerificationToken, setEmailVerificationToken] = useState("");
+  const [whatsappVerificationToken, setWhatsappVerificationToken] =
+    useState("");
+
   const [verificationType, setVerificationType] = useState<
     "email" | "whatsapp" | null
   >(null);
+
+  const [verificationToken, setVerificationToken] = useState("");
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -41,6 +48,8 @@ export const Registration = () => {
     // Changing email means previous verification is no longer valid
     setIsEmailVerified(false);
 
+    setEmailVerificationToken("");
+
     setError("");
   };
 
@@ -53,25 +62,65 @@ export const Registration = () => {
     // Changing number means previous verification is no longer valid
     setIsWhatsappVerified(false);
 
+    setWhatsappVerificationToken("");
+
     setError("");
   };
 
-  const handleVerifyEmail = () => {
+  const handleVerifyEmail = async () => {
     setError("");
-    if (!email) {
+    if (!email.trim()) {
       setError("Please enter your email address first.");
       return;
     }
-    setVerificationType("email");
+    try {
+      setLoading(true);
+      const response = await axios.post(
+        `${backendURL}/api/users/send-email-otp`,
+        { email: email.trim() },
+      );
+      if (response.data?.success) {
+        setVerificationToken(response.data.verificationToken);
+        setVerificationType("email");
+      } else {
+        setError(response.data?.message || "Failed to send email OTP.");
+      }
+    } catch (error: any) {
+      setError(
+        error.response?.data?.message ||
+          "Unable to send verification code to email.",
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleVerifyWhatsapp = () => {
+  const handleVerifyWhatsapp = async () => {
     setError("");
-    if (!number) {
+    if (!number.trim()) {
       setError("Please enter your WhatsApp number first.");
       return;
     }
-    setVerificationType("whatsapp");
+    try {
+      setLoading(true);
+      const response = await axios.post(
+        `${backendURL}/api/users/send-whatsapp-otp`,
+        { number: number.trim() },
+      );
+      if (response.data?.success) {
+        setVerificationToken(response.data.verificationToken);
+        setVerificationType("whatsapp");
+      } else {
+        setError(response.data?.message || "Failed to send WhatsApp OTP.");
+      }
+    } catch (error: any) {
+      setError(
+        error.response?.data?.message ||
+          "Unable to send verification code to WhatsApp.",
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -103,6 +152,11 @@ export const Registration = () => {
       return;
     }
 
+    if (!emailVerificationToken || !whatsappVerificationToken) {
+      setError("Verification is incomplete. Please verify again.");
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -116,6 +170,8 @@ export const Registration = () => {
         number: number.trim(),
         email: email.trim(),
         password,
+        emailVerificationToken,
+        whatsappVerificationToken,
       });
 
       if (response.data?.success) {
@@ -323,13 +379,24 @@ export const Registration = () => {
           <VerificationPopup
             type={verificationType}
             value={verificationType === "email" ? email : number}
-            onClose={() => setVerificationType(null)}
-            onVerified={() => {
+            verificationToken={verificationToken}
+            onClose={() => {
+              setVerificationType(null);
+              setVerificationToken("");
+            }}
+            onVerified={(verifiedToken: string) => {
               if (verificationType === "email") {
                 setIsEmailVerified(true);
+                setEmailVerificationToken(verifiedToken);
               } else {
                 setIsWhatsappVerified(true);
+                setWhatsappVerificationToken(verifiedToken);
               }
+              setVerificationType(null);
+              setVerificationToken("");
+            }}
+            onResendToken={(newToken: string) => {
+              setVerificationToken(newToken);
             }}
           />
         )}
