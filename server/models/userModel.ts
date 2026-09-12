@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema(
 
     number: {
       type: String,
+      required: true,
       trim: true,
     },
 
@@ -25,41 +26,11 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-
-    isEmailVerified: {
-      type: Boolean,
-      default: false,
-    },
-
-    emailVerificationOTP: {
-      type: String,
-    },
-
-    emailVerificationOTPExpires: {
-      type: Date,
-    },
-
-    emailVerificationAttempts: {
-      type: Number,
-      default: 0,
-    },
-
-    emailVerificationLastSentAt: {
-      type: Date,
-    },
-
-    emailVerificationResendCount: {
-      type: Number,
-      default: 0,
-    },
-
-    emailVerificationResendWindowStart: {
-      type: Date,
-    },
   },
   { timestamps: true },
 );
 
-const userModel = mongoose.models.User || mongoose.model("User", userSchema);
+const userModel =
+  mongoose.models.User || mongoose.model("User", userSchema);
 
 export default userModel;

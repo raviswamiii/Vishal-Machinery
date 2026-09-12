@@ -5,6 +5,7 @@ import axios from "axios";
 interface VerificationPopupProps {
   type: "email" | "whatsapp";
   value: string;
+  name: string;
   verificationToken: string;
   onClose: () => void;
   onVerified: (verifiedToken: string) => void;
@@ -14,6 +15,7 @@ interface VerificationPopupProps {
 export const VerificationPopup = ({
   type,
   value,
+  name,
   verificationToken,
   onClose,
   onVerified,
@@ -118,6 +120,7 @@ export const VerificationPopup = ({
           `${backendURL}/api/users/resend-email-otp`,
           {
             email: value.trim(),
+            name,
             verificationToken,
           },
         );

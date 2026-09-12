@@ -69,16 +69,25 @@ export const Registration = () => {
 
   const handleVerifyEmail = async () => {
     setError("");
+
+    if (!name.trim()) {
+      setError("Please enter your name first.");
+      return;
+    }
+
     if (!email.trim()) {
       setError("Please enter your email address first.");
       return;
     }
+
     try {
       setLoading(true);
+
       const response = await axios.post(
         `${backendURL}/api/users/send-email-otp`,
-        { email: email.trim() },
+        { name: name.trim(), email: email.trim() },
       );
+
       if (response.data?.success) {
         setVerificationToken(response.data.verificationToken);
         setVerificationType("email");
@@ -175,7 +184,7 @@ export const Registration = () => {
       });
 
       if (response.data?.success) {
-        navigate("/login");
+        navigate("/");
       } else {
         setError(response.data?.message || "Registration failed.");
       }
@@ -379,6 +388,7 @@ export const Registration = () => {
           <VerificationPopup
             type={verificationType}
             value={verificationType === "email" ? email : number}
+            name={name}
             verificationToken={verificationToken}
             onClose={() => {
               setVerificationType(null);
