@@ -24,7 +24,7 @@ export const VerificationPopup = ({
   const [otp, setOtp] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [timer, setTimer] = useState(30);
+  const [timer, setTimer] = useState(60);
   const backendURL = import.meta.env.VITE_BACKEND_URL;
 
   const isEmail = type === "email";

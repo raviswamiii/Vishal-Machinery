@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { VerificationPopup } from "./VerificationPopup";
 import axios from "axios";
+import { useUserContext } from "../context/userContext";
 import {
   Eye,
   EyeOff,
@@ -41,6 +42,7 @@ export const Registration = () => {
 
   const backendURL = import.meta.env.VITE_BACKEND_URL;
   const navigate = useNavigate();
+  const { setToken } = useUserContext();
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -184,6 +186,8 @@ export const Registration = () => {
       });
 
       if (response.data?.success) {
+        localStorage.setItem("token", response.data.token);
+        setToken(response.data.token);
         navigate("/");
       } else {
         setError(response.data?.message || "Registration failed.");
