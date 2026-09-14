@@ -4,7 +4,6 @@ import validator from "validator";
 import userModel from "../models/userModel.js";
 import { Request, Response } from "express";
 import crypto from "crypto";
-import transporter from "../config/email.js";
 import { sendVerificationEmail } from "../utils/sendVerificationEmail.js";
 import { sendVerificationWhatsApp } from "../utils/sendVerificationWhatsApp.js";
 import blacklistTokenModel from "../models/blacklistToken.js";
