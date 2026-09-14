@@ -1167,3 +1167,22 @@ export const userLogin = async (req: Request, res: Response) => {
   }
 };
 
+export const userLogout = async (req: Request, res: Response) => {
+  try {
+    const token =
+      req.cookies?.token || req.headers.authorization?.split(" ")[1];
+
+    if (!token) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Token not found." });
+    }
+
+    return res
+      .status(200)
+      .json({ success: true, message: "Logout successful." });
+  } catch (error: any) {
+    console.log("Logout failed.", error.message);
+    return res.status(500).json({ success: false, message: "Logout failed." });
+  }
+};

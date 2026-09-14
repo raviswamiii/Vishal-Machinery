@@ -1,8 +1,38 @@
 import { X } from "lucide-react";
 import { useUserContext } from "../context/userContext";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export const Logout = () => {
   const { showLogout, setShowLogout, setSideBar } = useUserContext();
+  const backendURL = import.meta.env.VITE_BACKEND_URL;
+  const navigate = useNavigate();
+
+  const logoutHandler = async () => {
+    try {
+      const response = await axios.post(
+        `${backendURL}/api/users/logout`,
+        null,
+        {
+          headers: { authorization: `Bearer ${localStorage.getItem("token")}` },
+        },
+      );
+
+      if (response.data.success) {
+        localStorage.removeItem("token");
+        setShowLogout(false);
+        setSideBar(false);
+        navigate("/login");
+      } else {
+        console.error("Logout failed:", response.data.message);
+      }
+    } catch (error: any) {
+      console.error(
+        "Logout failed:",
+        error.response?.data?.message || error.message,
+      );
+    }
+  };
   return (
     <div>
       {showLogout && (
@@ -30,10 +60,7 @@ export const Logout = () => {
                 Cancel
               </button>
               <button
-                onClick={() => {
-                  setShowLogout(false);
-                  setSideBar(false);
-                }}
+                onClick={logoutHandler}
                 className="rounded-lg bg-black px-4 py-2 text-sm font-medium text-white hover:bg-gray-800"
               >
                 Logout

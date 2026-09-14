@@ -2,6 +2,7 @@ import express from "express";
 import {
   userRegistration,
   userLogin,
+  userLogout,
   sendEmailOTP,
   verifyEmailOTP,
   resendEmailOTP,
@@ -14,6 +15,7 @@ const router = express.Router();
 
 router.post("/register", userRegistration);
 router.post("/login", userLogin);
+router.post("/logout", userLogout);
 
 router.post("/send-email-otp", sendEmailOTP);
 router.post("/verify-email-otp", verifyEmailOTP);
