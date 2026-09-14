@@ -10,6 +10,7 @@ import { Login } from "./components/Login";
 import { Registration } from "./components/Registration";
 import { SideBar } from "./components/SideBar";
 import { Product } from "./components/Product";
+import { Logout } from "./components/Logout";
 
 export const App = () => {
   const location = useLocation();
@@ -24,6 +25,7 @@ export const App = () => {
 
       {!hideNavbarAndFooter && <Navbar />}
       <SideBar />
+      <Logout />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/machines" element={<Machines />} />

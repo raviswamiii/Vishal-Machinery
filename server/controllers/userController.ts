@@ -105,21 +105,13 @@ export const sendEmailOTP = async (req: Request, res: Response) => {
     // -----------------------------
 
     try {
-      await sendVerificationEmail(
-        normalizedEmail,
-        name.trim(),
-        otp,
-      );
+      await sendVerificationEmail(normalizedEmail, name.trim(), otp);
     } catch (emailError) {
-      console.error(
-        "Email OTP sending error:",
-        emailError,
-      );
+      console.error("Email OTP sending error:", emailError);
 
       return res.status(500).json({
         success: false,
-        message:
-          "Unable to send verification email. Please try again.",
+        message: "Unable to send verification email. Please try again.",
       });
     }
 
@@ -192,10 +184,7 @@ export const verifyEmailOTP = async (req: Request, res: Response) => {
     let otpPayload: jwt.JwtPayload;
 
     try {
-      const decoded = jwt.verify(
-        verificationToken,
-        JWT_SECRET,
-      );
+      const decoded = jwt.verify(verificationToken, JWT_SECRET);
 
       if (typeof decoded === "string") {
         return res.status(400).json({
@@ -208,8 +197,7 @@ export const verifyEmailOTP = async (req: Request, res: Response) => {
     } catch {
       return res.status(400).json({
         success: false,
-        message:
-          "Verification session has expired. Please request a new OTP.",
+        message: "Verification session has expired. Please request a new OTP.",
       });
     }
 
@@ -231,8 +219,7 @@ export const verifyEmailOTP = async (req: Request, res: Response) => {
     if (otpPayload.target !== normalizedEmail) {
       return res.status(400).json({
         success: false,
-        message:
-          "This verification code does not belong to this email.",
+        message: "This verification code does not belong to this email.",
       });
     }
 
@@ -240,10 +227,7 @@ export const verifyEmailOTP = async (req: Request, res: Response) => {
     // 8. Check OTP hash exists
     // -----------------------------
 
-    if (
-      typeof otpPayload.otpHash !== "string" ||
-      !otpPayload.otpHash
-    ) {
+    if (typeof otpPayload.otpHash !== "string" || !otpPayload.otpHash) {
       return res.status(400).json({
         success: false,
         message: "Invalid verification session.",
@@ -320,8 +304,7 @@ export const resendEmailOTP = async (req: Request, res: Response) => {
     if (!email || !name || !verificationToken) {
       return res.status(400).json({
         success: false,
-        message:
-          "Name, email, and verification token are required.",
+        message: "Name, email, and verification token are required.",
       });
     }
 
@@ -349,10 +332,7 @@ export const resendEmailOTP = async (req: Request, res: Response) => {
     let oldTokenPayload: jwt.JwtPayload;
 
     try {
-      const decoded = jwt.verify(
-        verificationToken,
-        JWT_SECRET,
-      );
+      const decoded = jwt.verify(verificationToken, JWT_SECRET);
 
       if (typeof decoded === "string") {
         return res.status(400).json({
@@ -388,8 +368,7 @@ export const resendEmailOTP = async (req: Request, res: Response) => {
     if (oldTokenPayload.target !== normalizedEmail) {
       return res.status(400).json({
         success: false,
-        message:
-          "This verification session does not belong to this email.",
+        message: "This verification session does not belong to this email.",
       });
     }
 
@@ -413,9 +392,7 @@ export const resendEmailOTP = async (req: Request, res: Response) => {
     // 8. Generate new OTP
     // -----------------------------
 
-    const otp = crypto
-      .randomInt(100000, 1000000)
-      .toString();
+    const otp = crypto.randomInt(100000, 1000000).toString();
 
     // -----------------------------
     // 9. Hash new OTP
@@ -447,21 +424,13 @@ export const resendEmailOTP = async (req: Request, res: Response) => {
     // -----------------------------
 
     try {
-      await sendVerificationEmail(
-        normalizedEmail,
-        name.trim(),
-        otp,
-      );
+      await sendVerificationEmail(normalizedEmail, name.trim(), otp);
     } catch (emailError) {
-      console.error(
-        "Resend email OTP error:",
-        emailError,
-      );
+      console.error("Resend email OTP error:", emailError);
 
       return res.status(500).json({
         success: false,
-        message:
-          "Unable to send verification email. Please try again.",
+        message: "Unable to send verification email. Please try again.",
       });
     }
 
@@ -484,10 +453,7 @@ export const resendEmailOTP = async (req: Request, res: Response) => {
   }
 };
 
-export const sendWhatsAppOTP = async (
-  req: Request,
-  res: Response,
-) => {
+export const sendWhatsAppOTP = async (req: Request, res: Response) => {
   try {
     const { number } = req.body;
 
@@ -539,9 +505,7 @@ export const sendWhatsAppOTP = async (
     // 5. Generate 6-digit OTP
     // -----------------------------
 
-    const otp = crypto
-      .randomInt(100000, 1000000)
-      .toString();
+    const otp = crypto.randomInt(100000, 1000000).toString();
 
     // -----------------------------
     // 6. Hash OTP
@@ -580,20 +544,13 @@ export const sendWhatsAppOTP = async (
     // -----------------------------
 
     try {
-      await sendVerificationWhatsApp(
-        whatsappNumber,
-        otp,
-      );
+      await sendVerificationWhatsApp(whatsappNumber, otp);
     } catch (whatsappError) {
-      console.error(
-        "WhatsApp OTP sending error:",
-        whatsappError,
-      );
+      console.error("WhatsApp OTP sending error:", whatsappError);
 
       return res.status(500).json({
         success: false,
-        message:
-          "Unable to send WhatsApp verification code. Please try again.",
+        message: "Unable to send WhatsApp verification code. Please try again.",
       });
     }
 
@@ -607,10 +564,7 @@ export const sendWhatsAppOTP = async (
       verificationToken,
     });
   } catch (error) {
-    console.error(
-      "Send WhatsApp OTP error:",
-      error,
-    );
+    console.error("Send WhatsApp OTP error:", error);
 
     return res.status(500).json({
       success: false,
@@ -619,10 +573,7 @@ export const sendWhatsAppOTP = async (
   }
 };
 
-export const verifyWhatsAppOTP = async (
-  req: Request,
-  res: Response,
-) => {
+export const verifyWhatsAppOTP = async (req: Request, res: Response) => {
   try {
     const { number, otp, verificationToken } = req.body;
 
@@ -633,8 +584,7 @@ export const verifyWhatsAppOTP = async (
     if (!number || !otp || !verificationToken) {
       return res.status(400).json({
         success: false,
-        message:
-          "WhatsApp number, OTP, and verification token are required.",
+        message: "WhatsApp number, OTP, and verification token are required.",
       });
     }
 
@@ -673,10 +623,7 @@ export const verifyWhatsAppOTP = async (
     let otpPayload: jwt.JwtPayload;
 
     try {
-      const decoded = jwt.verify(
-        verificationToken,
-        JWT_SECRET,
-      );
+      const decoded = jwt.verify(verificationToken, JWT_SECRET);
 
       if (typeof decoded === "string") {
         return res.status(400).json({
@@ -689,8 +636,7 @@ export const verifyWhatsAppOTP = async (
     } catch {
       return res.status(400).json({
         success: false,
-        message:
-          "Verification session has expired. Please request a new OTP.",
+        message: "Verification session has expired. Please request a new OTP.",
       });
     }
 
@@ -721,10 +667,7 @@ export const verifyWhatsAppOTP = async (
     // 8. Check OTP hash exists
     // -----------------------------
 
-    if (
-      typeof otpPayload.otpHash !== "string" ||
-      !otpPayload.otpHash
-    ) {
+    if (typeof otpPayload.otpHash !== "string" || !otpPayload.otpHash) {
       return res.status(400).json({
         success: false,
         message: "Invalid verification session.",
@@ -781,10 +724,7 @@ export const verifyWhatsAppOTP = async (
       verifiedToken,
     });
   } catch (error) {
-    console.error(
-      "WhatsApp OTP verification error:",
-      error,
-    );
+    console.error("WhatsApp OTP verification error:", error);
 
     return res.status(500).json({
       success: false,
@@ -793,18 +733,14 @@ export const verifyWhatsAppOTP = async (
   }
 };
 
-export const resendWhatsAppOTP = async (
-  req: Request,
-  res: Response,
-) => {
+export const resendWhatsAppOTP = async (req: Request, res: Response) => {
   try {
     const { number, verificationToken } = req.body;
 
     if (!number || !verificationToken) {
       return res.status(400).json({
         success: false,
-        message:
-          "WhatsApp number and verification token are required.",
+        message: "WhatsApp number and verification token are required.",
       });
     }
 
@@ -814,8 +750,7 @@ export const resendWhatsAppOTP = async (
     if (!/^\d{10}$/.test(normalizedNumber)) {
       return res.status(400).json({
         success: false,
-        message:
-          "Please enter a valid 10-digit WhatsApp number.",
+        message: "Please enter a valid 10-digit WhatsApp number.",
       });
     }
 
@@ -823,10 +758,7 @@ export const resendWhatsAppOTP = async (
     let oldTokenPayload: jwt.JwtPayload;
 
     try {
-      const decoded = jwt.verify(
-        verificationToken,
-        JWT_SECRET,
-      );
+      const decoded = jwt.verify(verificationToken, JWT_SECRET);
 
       if (typeof decoded === "string") {
         return res.status(400).json({
@@ -848,8 +780,7 @@ export const resendWhatsAppOTP = async (
     if (oldTokenPayload.purpose !== "whatsapp_otp") {
       return res.status(400).json({
         success: false,
-        message:
-          "Invalid WhatsApp verification session.",
+        message: "Invalid WhatsApp verification session.",
       });
     }
 
@@ -870,15 +801,12 @@ export const resendWhatsAppOTP = async (
     if (numberExists) {
       return res.status(409).json({
         success: false,
-        message:
-          "WhatsApp number already registered.",
+        message: "WhatsApp number already registered.",
       });
     }
 
     // Generate a new 6-digit OTP
-    const otp = crypto
-      .randomInt(100000, 1000000)
-      .toString();
+    const otp = crypto.randomInt(100000, 1000000).toString();
 
     // Hash OTP using HMAC
     const otpHash = crypto
@@ -901,34 +829,23 @@ export const resendWhatsAppOTP = async (
 
     // Send new OTP through WhatsApp
     try {
-      await sendVerificationWhatsApp(
-        `+91${normalizedNumber}`,
-        otp,
-      );
+      await sendVerificationWhatsApp(`+91${normalizedNumber}`, otp);
     } catch (whatsappError) {
-      console.error(
-        "Resend WhatsApp OTP error:",
-        whatsappError,
-      );
+      console.error("Resend WhatsApp OTP error:", whatsappError);
 
       return res.status(500).json({
         success: false,
-        message:
-          "Unable to send WhatsApp verification code. Please try again.",
+        message: "Unable to send WhatsApp verification code. Please try again.",
       });
     }
 
     return res.status(200).json({
       success: true,
-      message:
-        "A new WhatsApp verification OTP has been sent.",
+      message: "A new WhatsApp verification OTP has been sent.",
       verificationToken: newVerificationToken,
     });
   } catch (error) {
-    console.error(
-      "Resend WhatsApp OTP error:",
-      error,
-    );
+    console.error("Resend WhatsApp OTP error:", error);
 
     return res.status(500).json({
       success: false,
@@ -1127,10 +1044,7 @@ export const userRegistration = async (req: Request, res: Response) => {
     // 12. Create login token
     // -----------------------------
 
-    const token = createToken(
-      user._id.toString(),
-      user.name,
-    );
+    const token = createToken(user._id.toString(), user.name);
 
     // -----------------------------
     // 13. Success
@@ -1213,10 +1127,7 @@ export const userLogin = async (req: Request, res: Response) => {
     // 6. Check password
     // -----------------------------
 
-    const isMatch = await bcrypt.compare(
-      password,
-      exists.password,
-    );
+    const isMatch = await bcrypt.compare(password, exists.password);
 
     if (!isMatch) {
       return res.status(401).json({
@@ -1229,10 +1140,7 @@ export const userLogin = async (req: Request, res: Response) => {
     // 7. Create JWT
     // -----------------------------
 
-    const token = createToken(
-      exists._id.toString(),
-      exists.name,
-    );
+    const token = createToken(exists._id.toString(), exists.name);
 
     // -----------------------------
     // 8. Return successful login
@@ -1258,3 +1166,4 @@ export const userLogin = async (req: Request, res: Response) => {
     });
   }
 };
+

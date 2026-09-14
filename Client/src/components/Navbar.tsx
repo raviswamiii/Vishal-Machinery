@@ -51,23 +51,20 @@ export const Navbar = () => {
         {!token ? (
           <Link
             to="/register"
-            className="flex bg-yellow-400 rounded-sm justify-center items-center gap-2 px-3 md:px-4 py-1 md:py-2 cursor-pointer"
+            className="hidden md:flex bg-yellow-400 rounded-sm justify-center items-center gap-2 px-3 md:px-4 py-1 md:py-2 cursor-pointer"
           >
-            {" "}
-            <PiUserCirclePlusLight className="text-lg md:text-xl" />{" "}
-            <span className="text-xs font-bold montserrat">SIGN UP</span>{" "}
+            <PiUserCirclePlusLight className="text-lg md:text-xl" />
+            <span className="text-xs font-bold montserrat">SIGN UP</span>
           </Link>
         ) : (
           <button
             onClick={() => setShowLogout(true)}
-            className="flex bg-yellow-400 rounded-sm justify-center items-center gap-2 px-3 md:px-4 py-1 md:py-2 cursor-pointer"
+            className="hidden md:flex bg-yellow-400 rounded-sm justify-center items-center gap-2 px-3 md:px-4 py-1 md:py-2 cursor-pointer"
           >
-            {" "}
-            <LogOut className="text-lg md:text-xl" />{" "}
-            <span className="text-xs font-bold montserrat">LOGOUT</span>{" "}
+            <LogOut className="text-lg md:text-xl" />
+            <span className="text-xs font-bold montserrat">LOGOUT</span>
           </button>
         )}
-
         {/* Mobile Hamburger Menu Button */}
         <button onClick={() => setSideBar(true)} className="md:hidden">
           <RiMenu3Fill className="text-xl" />
