@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import { useUserContext } from "../context/userContext";
 
 export const SideBar = () => {
-  const { sideBar, setSideBar, setShowLogout } = useUserContext();
+  const { sideBar, setSideBar, setShowLogout, token } = useUserContext();
   return (
     <div
       className={`bg-black montserrat text-white h-screen w-[50%] fixed right-0 top-0 z-20 ${sideBar ? "translate-x-0" : "translate-x-full"} transition-transform duration-300`}
@@ -48,13 +48,15 @@ export const SideBar = () => {
           <Contact size={20} strokeWidth={2} className="inline-block ml-2" />
           <p>CONTACT</p>
         </NavLink>
-        <div
-          onClick={() => setShowLogout(true)}
-          className="flex items-center gap-4"
-        >
-          <LogOut size={20} strokeWidth={2} className="inline-block ml-2" />
-          <p>LOGOUT</p>
-        </div>
+        {token ? (
+          <div
+            onClick={() => setShowLogout(true)}
+            className="flex items-center gap-4"
+          >
+            <LogOut size={20} strokeWidth={2} className="inline-block ml-2" />
+            <p>LOGOUT</p>
+          </div>
+        ) : null}
       </div>
     </div>
   );
