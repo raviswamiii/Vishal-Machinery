@@ -7,6 +7,7 @@ import crypto from "crypto";
 import transporter from "../config/email.js";
 import { sendVerificationEmail } from "../utils/sendVerificationEmail.js";
 import { sendVerificationWhatsApp } from "../utils/sendVerificationWhatsApp.js";
+import blacklistTokenModel from "../models/blacklistToken.js";
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -1177,6 +1178,14 @@ export const userLogout = async (req: Request, res: Response) => {
         .status(401)
         .json({ success: false, message: "Token not found." });
     }
+
+    await blacklistTokenModel.create({ token });
+
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    });
 
     return res
       .status(200)
