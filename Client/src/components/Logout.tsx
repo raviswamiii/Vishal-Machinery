@@ -4,7 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 export const Logout = () => {
-  const { showLogout, setShowLogout, setSideBar } = useUserContext();
+  const { showLogout, setShowLogout, setSideBar, setToken } = useUserContext();
   const backendURL = import.meta.env.VITE_BACKEND_URL;
   const navigate = useNavigate();
 
@@ -20,6 +20,7 @@ export const Logout = () => {
 
       if (response.data.success) {
         localStorage.removeItem("token");
+        setToken(null);
         setShowLogout(false);
         setSideBar(false);
         navigate("/login");
