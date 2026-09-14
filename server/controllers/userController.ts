@@ -20,13 +20,130 @@ const createToken = (id: string, name: string) => {
   });
 };
 
+// export const sendEmailOTP = async (req: Request, res: Response) => {
+//   try {
+//     const { email, name } = req.body;
+
+//     // -----------------------------
+//     // 1. Validate required fields
+//     // -----------------------------
+
+//     if (!email || !name) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Name and email are required.",
+//       });
+//     }
+
+//     // -----------------------------
+//     // 2. Normalize email
+//     // -----------------------------
+
+//     const normalizedEmail = email.toLowerCase().trim();
+
+//     // -----------------------------
+//     // 3. Validate email
+//     // -----------------------------
+
+//     if (!validator.isEmail(normalizedEmail)) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Please enter a valid email address.",
+//       });
+//     }
+
+//     // -----------------------------
+//     // 4. Check if email already
+//     //    belongs to a registered user
+//     // -----------------------------
+
+//     const emailExists = await userModel.findOne({
+//       email: normalizedEmail,
+//     });
+
+//     if (emailExists) {
+//       return res.status(409).json({
+//         success: false,
+//         message: "Email already registered.",
+//       });
+//     }
+
+//     // -----------------------------
+//     // 5. Generate 6-digit OTP
+//     // -----------------------------
+
+//     const otp = crypto.randomInt(100000, 1000000).toString();
+
+//     // -----------------------------
+//     // 6. Hash OTP
+//     // -----------------------------
+
+//     const otpHash = crypto
+//       .createHmac("sha256", JWT_SECRET)
+//       .update(otp)
+//       .digest("hex");
+
+//     // -----------------------------
+//     // 7. Create temporary
+//     //    verification token
+//     // -----------------------------
+
+//     const verificationToken = jwt.sign(
+//       {
+//         purpose: "email_otp",
+//         target: normalizedEmail,
+//         otpHash,
+//       },
+//       JWT_SECRET,
+//       {
+//         expiresIn: "10m",
+//       },
+//     );
+
+//     // -----------------------------
+//     // 8. Send OTP email
+//     // -----------------------------
+
+//     try {
+//       await sendVerificationEmail(normalizedEmail, name.trim(), otp);
+//     } catch (emailError) {
+//       console.error("Email OTP sending error:", emailError);
+
+//       return res.status(500).json({
+//         success: false,
+//         message: "Unable to send verification email. Please try again.",
+//       });
+//     }
+
+//     // -----------------------------
+//     // 9. Return temporary token
+//     // -----------------------------
+
+//     return res.status(200).json({
+//       success: true,
+//       message: "Verification OTP sent to your email.",
+//       verificationToken,
+//     });
+//   } catch (error) {
+//     console.error("Send email OTP error:", error);
+
+//     return res.status(500).json({
+//       success: false,
+//       message: "Internal server error.",
+//     });
+//   }
+// };
+
 export const sendEmailOTP = async (req: Request, res: Response) => {
   try {
+    console.log("🟢 STEP 1: sendEmailOTP started");
+
     const { email, name } = req.body;
 
-    // -----------------------------
-    // 1. Validate required fields
-    // -----------------------------
+    console.log("🟢 STEP 2: body:", {
+      email,
+      name,
+    });
 
     if (!email || !name) {
       return res.status(400).json({
@@ -35,31 +152,15 @@ export const sendEmailOTP = async (req: Request, res: Response) => {
       });
     }
 
-    // -----------------------------
-    // 2. Normalize email
-    // -----------------------------
-
     const normalizedEmail = email.toLowerCase().trim();
 
-    // -----------------------------
-    // 3. Validate email
-    // -----------------------------
-
-    if (!validator.isEmail(normalizedEmail)) {
-      return res.status(400).json({
-        success: false,
-        message: "Please enter a valid email address.",
-      });
-    }
-
-    // -----------------------------
-    // 4. Check if email already
-    //    belongs to a registered user
-    // -----------------------------
+    console.log("🟢 STEP 3: email normalized:", normalizedEmail);
 
     const emailExists = await userModel.findOne({
       email: normalizedEmail,
     });
+
+    console.log("🟢 STEP 4: database check completed");
 
     if (emailExists) {
       return res.status(409).json({
@@ -68,25 +169,17 @@ export const sendEmailOTP = async (req: Request, res: Response) => {
       });
     }
 
-    // -----------------------------
-    // 5. Generate 6-digit OTP
-    // -----------------------------
-
     const otp = crypto.randomInt(100000, 1000000).toString();
 
-    // -----------------------------
-    // 6. Hash OTP
-    // -----------------------------
+    console.log("🟢 STEP 5: OTP generated");
 
     const otpHash = crypto
       .createHmac("sha256", JWT_SECRET)
       .update(otp)
       .digest("hex");
 
-    // -----------------------------
-    // 7. Create temporary
-    //    verification token
-    // -----------------------------
+    console.log("🟢 STEP 6: OTP hashed");
+    console.log("JWT_SECRET exists:", !!JWT_SECRET);
 
     const verificationToken = jwt.sign(
       {
@@ -97,39 +190,34 @@ export const sendEmailOTP = async (req: Request, res: Response) => {
       JWT_SECRET,
       {
         expiresIn: "10m",
-      },
+      }
     );
 
-    // -----------------------------
-    // 8. Send OTP email
-    // -----------------------------
+    console.log("🟢 STEP 7: JWT created");
 
-    try {
-      await sendVerificationEmail(normalizedEmail, name.trim(), otp);
-    } catch (emailError) {
-      console.error("Email OTP sending error:", emailError);
+    await sendVerificationEmail(
+      normalizedEmail,
+      name.trim(),
+      otp
+    );
 
-      return res.status(500).json({
-        success: false,
-        message: "Unable to send verification email. Please try again.",
-      });
-    }
-
-    // -----------------------------
-    // 9. Return temporary token
-    // -----------------------------
+    console.log("🟢 STEP 8: EMAIL SENT");
 
     return res.status(200).json({
       success: true,
       message: "Verification OTP sent to your email.",
       verificationToken,
     });
+
   } catch (error) {
-    console.error("Send email OTP error:", error);
+    console.error("🔥 SEND EMAIL OTP ERROR:", error);
 
     return res.status(500).json({
       success: false,
-      message: "Internal server error.",
+      message:
+        error instanceof Error
+          ? error.message
+          : "Internal server error.",
     });
   }
 };
