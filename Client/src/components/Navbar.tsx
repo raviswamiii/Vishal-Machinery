@@ -3,6 +3,7 @@ import logo from "../assets/Logo/Logo.png";
 import { PiUserCirclePlusLight } from "react-icons/pi";
 import { NavLink, Link } from "react-router-dom";
 import { useUserContext } from "../context/userContext";
+import { LogOut } from "lucide-react";
 
 const navItems = [
   { name: "HOME", path: "/" },
@@ -12,7 +13,7 @@ const navItems = [
 ];
 
 export const Navbar = () => {
-  const { token, setSideBar } = useUserContext();
+  const { token, setSideBar, setShowLogout } = useUserContext();
   return (
     <div className="h-15 bg-[#F6FAEF] flex justify-between items-center p-2 md:px-10">
       {/* Brand Logo */}
@@ -47,14 +48,24 @@ export const Navbar = () => {
       {/* Sign Up Button and Mobile Menu */}
       <div className="flex items-center gap-4">
         {/* Sign Up Button */}
-        {!token && (
+        {!token ? (
           <Link
             to="/register"
             className="flex bg-yellow-400 rounded-sm justify-center items-center gap-2 px-3 md:px-4 py-1 md:py-2 cursor-pointer"
           >
-            <PiUserCirclePlusLight className="text-lg md:text-xl" />
-            <span className="text-xs font-bold montserrat">SIGN UP</span>
+            {" "}
+            <PiUserCirclePlusLight className="text-lg md:text-xl" />{" "}
+            <span className="text-xs font-bold montserrat">SIGN UP</span>{" "}
           </Link>
+        ) : (
+          <button
+            onClick={() => setShowLogout(true)}
+            className="flex bg-yellow-400 rounded-sm justify-center items-center gap-2 px-3 md:px-4 py-1 md:py-2 cursor-pointer"
+          >
+            {" "}
+            <LogOut className="text-lg md:text-xl" />{" "}
+            <span className="text-xs font-bold montserrat">LOGOUT</span>{" "}
+          </button>
         )}
 
         {/* Mobile Hamburger Menu Button */}

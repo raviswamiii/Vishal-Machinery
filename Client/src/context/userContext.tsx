@@ -5,6 +5,8 @@ interface UserContextType {
   setToken: (token: string | null) => void;
   sideBar: boolean;
   setSideBar: (sidebar: boolean) => void;
+  showLogout: boolean;
+  setShowLogout: (showLogout: boolean) => void;
 }
 
 interface UserContextProviderProps {
@@ -22,7 +24,9 @@ export const UserContextProvider = ({ children }: UserContextProviderProps) => {
 
   const [sideBar, setSideBar] = useState<boolean>(false);
 
-  const value: UserContextType = { token, setToken, sideBar, setSideBar };
+  const [showLogout, setShowLogout] = useState<boolean>(false);
+
+  const value: UserContextType = { token, setToken, sideBar, setSideBar, showLogout, setShowLogout };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };
