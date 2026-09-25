@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { VerificationPopup } from "./VerificationPopup";
+// import { VerificationPopup } from "./VerificationPopup";
 import axios from "axios";
 import { useUserContext } from "../context/userContext";
 import {
@@ -9,31 +9,31 @@ import {
   LockKeyhole,
   Mail,
   UserRound,
-  Phone,
+  // Phone,
   LogIn,
   ArrowLeft,
-  CheckCircle,
+  // CheckCircle,
   ShieldCheck,
 } from "lucide-react";
 
 export const Registration = () => {
   const [name, setName] = useState("");
-  const [number, setNumber] = useState("");
+  // const [number, setNumber] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const [isEmailVerified, setIsEmailVerified] = useState(false);
-  const [isWhatsappVerified, setIsWhatsappVerified] = useState(false);
+  // const [isEmailVerified, setIsEmailVerified] = useState(false);
+  // const [isWhatsappVerified, setIsWhatsappVerified] = useState(false);
 
-  const [emailVerificationToken, setEmailVerificationToken] = useState("");
-  const [whatsappVerificationToken, setWhatsappVerificationToken] =
-    useState("");
+  // const [emailVerificationToken, setEmailVerificationToken] = useState("");
+  // const [whatsappVerificationToken, setWhatsappVerificationToken] =
+  //   useState("");
 
-  const [verificationType, setVerificationType] = useState<
-    "email" | "whatsapp" | null
-  >(null);
+  // const [verificationType, setVerificationType] = useState<
+  //   "email" | "whatsapp" | null
+  // >(null);
 
-  const [verificationToken, setVerificationToken] = useState("");
+  // const [verificationToken, setVerificationToken] = useState("");
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -44,129 +44,129 @@ export const Registration = () => {
   const navigate = useNavigate();
   const { setToken } = useUserContext();
 
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
+  // const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setEmail(e.target.value);
 
-    // Changing email means previous verification is no longer valid
-    setIsEmailVerified(false);
+  //   // Changing email means previous verification is no longer valid
+  //   setIsEmailVerified(false);
 
-    setEmailVerificationToken("");
+  //   setEmailVerificationToken("");
 
-    setError("");
-  };
+  //   setError("");
+  // };
 
-  const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // Only allow numbers
-    const value = e.target.value.replace(/\D/g, "");
+  // const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   // Only allow numbers
+  //   const value = e.target.value.replace(/\D/g, "");
 
-    setNumber(value);
+  //   setNumber(value);
 
-    // Changing number means previous verification is no longer valid
-    setIsWhatsappVerified(false);
+  //   // Changing number means previous verification is no longer valid
+  //   setIsWhatsappVerified(false);
 
-    setWhatsappVerificationToken("");
+  //   setWhatsappVerificationToken("");
 
-    setError("");
-  };
+  //   setError("");
+  // };
 
-  const handleVerifyEmail = async () => {
-    setError("");
+  // const handleVerifyEmail = async () => {
+  //   setError("");
 
-    if (!name.trim()) {
-      setError("Please enter your name first.");
-      return;
-    }
+  //   if (!name.trim()) {
+  //     setError("Please enter your name first.");
+  //     return;
+  //   }
 
-    if (!email.trim()) {
-      setError("Please enter your email address first.");
-      return;
-    }
+  //   if (!email.trim()) {
+  //     setError("Please enter your email address first.");
+  //     return;
+  //   }
 
-    try {
-      setLoading(true);
+  //   try {
+  //     setLoading(true);
 
-      const response = await axios.post(
-        `${backendURL}/api/users/send-email-otp`,
-        { name: name.trim(), email: email.trim() },
-      );
+  //     const response = await axios.post(
+  //       `${backendURL}/api/users/send-email-otp`,
+  //       { name: name.trim(), email: email.trim() },
+  //     );
 
-      if (response.data?.success) {
-        setVerificationToken(response.data.verificationToken);
-        setVerificationType("email");
-      } else {
-        setError(response.data?.message || "Failed to send email OTP.");
-      }
-    } catch (error: any) {
-      setError(
-        error.response?.data?.message ||
-          "Unable to send verification code to email.",
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+  //     if (response.data?.success) {
+  //       setVerificationToken(response.data.verificationToken);
+  //       setVerificationType("email");
+  //     } else {
+  //       setError(response.data?.message || "Failed to send email OTP.");
+  //     }
+  //   } catch (error: any) {
+  //     setError(
+  //       error.response?.data?.message ||
+  //         "Unable to send verification code to email.",
+  //     );
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
-  const handleVerifyWhatsapp = async () => {
-    setError("");
-    if (!number.trim()) {
-      setError("Please enter your WhatsApp number first.");
-      return;
-    }
-    try {
-      setLoading(true);
-      const response = await axios.post(
-        `${backendURL}/api/users/send-whatsapp-otp`,
-        { number: number.trim() },
-      );
-      if (response.data?.success) {
-        setVerificationToken(response.data.verificationToken);
-        setVerificationType("whatsapp");
-      } else {
-        setError(response.data?.message || "Failed to send WhatsApp OTP.");
-      }
-    } catch (error: any) {
-      setError(
-        error.response?.data?.message ||
-          "Unable to send verification code to WhatsApp.",
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const handleVerifyWhatsapp = async () => {
+  //   setError("");
+  //   if (!number.trim()) {
+  //     setError("Please enter your WhatsApp number first.");
+  //     return;
+  //   }
+  //   try {
+  //     setLoading(true);
+  //     const response = await axios.post(
+  //       `${backendURL}/api/users/send-whatsapp-otp`,
+  //       { number: number.trim() },
+  //     );
+  //     if (response.data?.success) {
+  //       setVerificationToken(response.data.verificationToken);
+  //       setVerificationType("whatsapp");
+  //     } else {
+  //       setError(response.data?.message || "Failed to send WhatsApp OTP.");
+  //     }
+  //   } catch (error: any) {
+  //     setError(
+  //       error.response?.data?.message ||
+  //         "Unable to send verification code to WhatsApp.",
+  //     );
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     setError("");
 
-    if (!name || !number || !email || !password) {
+    if (!name || !email || !password) {
       setError("All fields are required.");
       return;
     }
 
     // Check email verification
-    if (!isEmailVerified && !isWhatsappVerified) {
-      setError(
-        "Please verify your email and WhatsApp number before continuing.",
-      );
-      return;
-    }
+    // if (!isEmailVerified && !isWhatsappVerified) {
+    //   setError(
+    //     "Please verify your email and WhatsApp number before continuing.",
+    //   );
+    //   return;
+    // }
 
-    if (!isEmailVerified) {
-      setError("Please verify your email address before continuing.");
-      return;
-    }
+    // if (!isEmailVerified) {
+    //   setError("Please verify your email address before continuing.");
+    //   return;
+    // }
 
-    // Check WhatsApp verification
-    if (!isWhatsappVerified) {
-      setError("Please verify your WhatsApp number before continuing.");
-      return;
-    }
+    // // Check WhatsApp verification
+    // if (!isWhatsappVerified) {
+    //   setError("Please verify your WhatsApp number before continuing.");
+    //   return;
+    // }
 
-    if (!emailVerificationToken || !whatsappVerificationToken) {
-      setError("Verification is incomplete. Please verify again.");
-      return;
-    }
+    // if (!emailVerificationToken || !whatsappVerificationToken) {
+    //   setError("Verification is incomplete. Please verify again.");
+    //   return;
+    // }
 
     setLoading(true);
 
@@ -178,11 +178,11 @@ export const Registration = () => {
 
       const response = await axios.post(`${backendURL}/api/users/register`, {
         name: name.trim(),
-        number: number.trim(),
+        // number: number.trim(),
         email: email.trim(),
         password,
-        emailVerificationToken,
-        whatsappVerificationToken,
+        // emailVerificationToken,
+        // whatsappVerificationToken,
       });
 
       if (response.data?.success) {
@@ -223,10 +223,6 @@ export const Registration = () => {
             <h1 className="text-white text-3xl font-bold">
               Create your account
             </h1>
-
-            <p className="text-gray-500 text-sm mt-2">
-              Verify your email and WhatsApp number
-            </p>
           </div>
 
           {/* Form */}
@@ -254,7 +250,7 @@ export const Registration = () => {
             </div>
 
             {/* WhatsApp Number */}
-            <div>
+            {/* <div>
               <label className="block text-sm font-semibold text-white mb-2">
                 WhatsApp Number
               </label>
@@ -290,7 +286,7 @@ export const Registration = () => {
                   </button>
                 )}
               </div>
-            </div>
+            </div> */}
 
             {/* Email */}
             <div>
@@ -306,12 +302,16 @@ export const Registration = () => {
                     type="email"
                     placeholder="Enter your email"
                     value={email}
-                    onChange={handleEmailChange}
+                    // onChange={handleEmailChange}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      setError("");
+                    }}
                     className="w-full bg-transparent outline-none text-white text-sm placeholder:text-gray-600"
                   />
                 </div>
 
-                {isEmailVerified ? (
+                {/* {isEmailVerified ? (
                   <div className="h-10 px-3 flex items-center gap-1 text-green-500 text-sm font-semibold">
                     <CheckCircle size={18} />
                     Verified
@@ -325,7 +325,7 @@ export const Registration = () => {
                   >
                     Verify
                   </button>
-                )}
+                )} */}
               </div>
             </div>
 
@@ -388,7 +388,7 @@ export const Registration = () => {
           </div>
         </div>
 
-        {verificationType && (
+        {/* {verificationType && (
           <VerificationPopup
             type={verificationType}
             value={verificationType === "email" ? email : number}
@@ -413,7 +413,7 @@ export const Registration = () => {
               setVerificationToken(newToken);
             }}
           />
-        )}
+        )} */}
       </div>
     </div>
   );
