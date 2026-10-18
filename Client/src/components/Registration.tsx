@@ -38,7 +38,8 @@ export const Registration = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [isSendingOtp, setIsSendingOtp] = useState(false);
+  const [isCreatingAccount, setIsCreatingAccount] = useState(false);
 
   const backendURL = import.meta.env.VITE_BACKEND_URL;
   const navigate = useNavigate();
@@ -83,7 +84,7 @@ export const Registration = () => {
     }
 
     try {
-      setLoading(true);
+      setIsSendingOtp(true);
 
       const response = await axios.post(
         `${backendURL}/api/users/send-email-otp`,
@@ -102,7 +103,7 @@ export const Registration = () => {
           "Unable to send verification code to email.",
       );
     } finally {
-      setLoading(false);
+      setIsSendingOtp(false);
     }
   };
 
@@ -168,8 +169,7 @@ export const Registration = () => {
       return;
     }
 
-    setLoading(true);
-
+    setIsCreatingAccount(true);
     try {
       /*
         This registration API will be changed later
@@ -195,7 +195,7 @@ export const Registration = () => {
     } catch (error: any) {
       setError(error.response?.data?.message || "Something went wrong.");
     } finally {
-      setLoading(false);
+      setIsCreatingAccount(true);
     }
   };
   return (
@@ -320,10 +320,10 @@ export const Registration = () => {
                   <button
                     type="button"
                     onClick={handleVerifyEmail}
-                    disabled={!email}
+                    disabled={!email || isSendingOtp}
                     className="h-10 px-3 bg-[#ffc400] hover:bg-[#ffd333] disabled:opacity-40 disabled:cursor-not-allowed text-black text-sm font-semibold rounded-md transition"
                   >
-                    Verify
+                    {isSendingOtp ? "Sending..." : "Verify"}
                   </button>
                 )}
               </div>
@@ -367,12 +367,14 @@ export const Registration = () => {
             {/* Sign In */}
             <button
               type="submit"
-              disabled={loading}
+              disabled={isCreatingAccount}
               className="w-full h-10 bg-[#ffc400] hover:bg-[#ffd333] text-black font-bold rounded-md flex items-center justify-center gap-3 transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <LogIn size={19} />
 
-              {loading ? "Creating Account..." : "Create your account"}
+              {isCreatingAccount
+                ? "Creating Account..."
+                : "Create your account"}
             </button>
           </form>
 
@@ -388,7 +390,7 @@ export const Registration = () => {
           </div>
         </div>
 
-         {verificationType && (
+        {verificationType && (
           <VerificationPopup
             type={verificationType}
             // value={verificationType === "email" ? email : number}
