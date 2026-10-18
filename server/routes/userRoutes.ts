@@ -3,9 +3,9 @@ import {
   userRegistration,
   userLogin,
   userLogout,
-  // sendEmailOTP,
-  // verifyEmailOTP,
-  // resendEmailOTP,
+  sendEmailOTP,
+  verifyEmailOTP,
+  resendEmailOTP,
   // sendWhatsAppOTP,
   // verifyWhatsAppOTP,
   // resendWhatsAppOTP,
@@ -17,9 +17,9 @@ router.post("/register", userRegistration);
 router.post("/login", userLogin);
 router.post("/logout", userLogout);
 
-// router.post("/send-email-otp", sendEmailOTP);
-// router.post("/verify-email-otp", verifyEmailOTP);
-// router.post("/resend-email-otp", resendEmailOTP);
+router.post("/send-email-otp", sendEmailOTP);
+router.post("/verify-email-otp", verifyEmailOTP);
+router.post("/resend-email-otp", resendEmailOTP);
 
 // router.post("/send-whatsapp-otp", sendWhatsAppOTP);
 // router.post("/verify-whatsapp-otp", verifyWhatsAppOTP);

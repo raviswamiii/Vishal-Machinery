@@ -139,7 +139,7 @@ export const VerificationPopup = ({
         onResendToken(response.data.verificationToken);
 
         // Start resend cooldown again
-        setTimer(30);
+        setTimer(60);
 
         setError("");
       } else {
@@ -157,6 +157,12 @@ export const VerificationPopup = ({
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    setOtp("");
+    setError("");
+    setTimer(60);
+  }, [value, type]);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
@@ -236,7 +242,8 @@ export const VerificationPopup = ({
             <button
               type="button"
               onClick={handleResend}
-              className="text-[#ffc400] font-semibold hover:underline"
+              disabled={loading}
+              className="text-[#ffc400] font-semibold hover:underline disabled:opacity-40 disabled:curson-not-allowed"
             >
               Resend OTP
             </button>

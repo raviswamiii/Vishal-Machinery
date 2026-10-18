@@ -20,438 +20,438 @@ const createToken = (id: string, name: string) => {
   });
 };
 
-// export const sendEmailOTP = async (req: Request, res: Response) => {
-//   try {
-//     const { email, name } = req.body;
-
-//     // -----------------------------
-//     // 1. Validate required fields
-//     // -----------------------------
-
-//     if (!email || !name) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "Name and email are required.",
-//       });
-//     }
-
-//     // -----------------------------
-//     // 2. Normalize email
-//     // -----------------------------
-
-//     const normalizedEmail = email.toLowerCase().trim();
-
-//     // -----------------------------
-//     // 3. Validate email
-//     // -----------------------------
-
-//     if (!validator.isEmail(normalizedEmail)) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "Please enter a valid email address.",
-//       });
-//     }
-
-//     // -----------------------------
-//     // 4. Check if email already
-//     //    belongs to a registered user
-//     // -----------------------------
-
-//     const emailExists = await userModel.findOne({
-//       email: normalizedEmail,
-//     });
-
-//     if (emailExists) {
-//       return res.status(409).json({
-//         success: false,
-//         message: "Email already registered.",
-//       });
-//     }
-
-//     // -----------------------------
-//     // 5. Generate 6-digit OTP
-//     // -----------------------------
-
-//     const otp = crypto.randomInt(100000, 1000000).toString();
-
-//     // -----------------------------
-//     // 6. Hash OTP
-//     // -----------------------------
-
-//     const otpHash = crypto
-//       .createHmac("sha256", JWT_SECRET)
-//       .update(otp)
-//       .digest("hex");
-
-//     // -----------------------------
-//     // 7. Create temporary
-//     //    verification token
-//     // -----------------------------
-
-//     const verificationToken = jwt.sign(
-//       {
-//         purpose: "email_otp",
-//         target: normalizedEmail,
-//         otpHash,
-//       },
-//       JWT_SECRET,
-//       {
-//         expiresIn: "10m",
-//       },
-//     );
-
-//     // -----------------------------
-//     // 8. Send OTP email
-//     // -----------------------------
-
-//     try {
-//       await sendVerificationEmail(normalizedEmail, name.trim(), otp);
-//     } catch (emailError) {
-//       console.error("Email OTP sending error:", emailError);
-
-//       return res.status(500).json({
-//         success: false,
-//         message: "Unable to send verification email. Please try again.",
-//       });
-//     }
-
-//     // -----------------------------
-//     // 9. Return temporary token
-//     // -----------------------------
-
-//     return res.status(200).json({
-//       success: true,
-//       message: "Verification OTP sent to your email.",
-//       verificationToken,
-//     });
-//   } catch (error) {
-//     console.error("Send email OTP error:", error);
-
-//     return res.status(500).json({
-//       success: false,
-//       message: "Internal server error.",
-//     });
-//   }
-// };
-
-// export const verifyEmailOTP = async (req: Request, res: Response) => {
-//   try {
-//     const { email, otp, verificationToken } = req.body;
-
-//     // -----------------------------
-//     // 1. Validate required fields
-//     // -----------------------------
-
-//     if (!email || !otp || !verificationToken) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "Email, OTP, and verification token are required.",
-//       });
-//     }
-
-//     // -----------------------------
-//     // 2. Normalize email
-//     // -----------------------------
-
-//     const normalizedEmail = email.toLowerCase().trim();
-
-//     // -----------------------------
-//     // 3. Validate email
-//     // -----------------------------
-
-//     if (!validator.isEmail(normalizedEmail)) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "Please enter a valid email address.",
-//       });
-//     }
-
-//     // -----------------------------
-//     // 4. Validate OTP
-//     // -----------------------------
-
-//     if (!/^\d{6}$/.test(otp)) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "OTP must be a 6-digit number.",
-//       });
-//     }
-
-//     // -----------------------------
-//     // 5. Verify temporary OTP token
-//     // -----------------------------
-
-//     let otpPayload: jwt.JwtPayload;
-
-//     try {
-//       const decoded = jwt.verify(verificationToken, JWT_SECRET);
-
-//       if (typeof decoded === "string") {
-//         return res.status(400).json({
-//           success: false,
-//           message: "Invalid verification token.",
-//         });
-//       }
-
-//       otpPayload = decoded;
-//     } catch {
-//       return res.status(400).json({
-//         success: false,
-//         message: "Verification session has expired. Please request a new OTP.",
-//       });
-//     }
-
-//     // -----------------------------
-//     // 6. Check token purpose
-//     // -----------------------------
-
-//     if (otpPayload.purpose !== "email_otp") {
-//       return res.status(400).json({
-//         success: false,
-//         message: "Invalid email verification token.",
-//       });
-//     }
-
-//     // -----------------------------
-//     // 7. Check email matches token
-//     // -----------------------------
-
-//     if (otpPayload.target !== normalizedEmail) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "This verification code does not belong to this email.",
-//       });
-//     }
-
-//     // -----------------------------
-//     // 8. Check OTP hash exists
-//     // -----------------------------
-
-//     if (typeof otpPayload.otpHash !== "string" || !otpPayload.otpHash) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "Invalid verification session.",
-//       });
-//     }
-
-//     // -----------------------------
-//     // 9. Hash entered OTP
-//     // -----------------------------
-
-//     const enteredOTPHash = crypto
-//       .createHmac("sha256", JWT_SECRET)
-//       .update(otp)
-//       .digest("hex");
-
-//     // -----------------------------
-//     // 10. Compare OTP
-//     // -----------------------------
-
-//     const isOTPValid = crypto.timingSafeEqual(
-//       Buffer.from(enteredOTPHash, "hex"),
-//       Buffer.from(otpPayload.otpHash, "hex"),
-//     );
-
-//     if (!isOTPValid) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "Invalid OTP.",
-//       });
-//     }
-
-//     // -----------------------------
-//     // 11. Create verified proof token
-//     // -----------------------------
-
-//     const verifiedToken = jwt.sign(
-//       {
-//         purpose: "email_verified",
-//         target: normalizedEmail,
-//       },
-//       JWT_SECRET,
-//       {
-//         expiresIn: "15m",
-//       },
-//     );
-
-//     // -----------------------------
-//     // 12. Success
-//     // -----------------------------
-
-//     return res.status(200).json({
-//       success: true,
-//       message: "Email verified successfully.",
-//       verifiedToken,
-//     });
-//   } catch (error) {
-//     console.error("Email OTP verification error:", error);
-
-//     return res.status(500).json({
-//       success: false,
-//       message: "Internal server error.",
-//     });
-//   }
-// };
-
-// export const resendEmailOTP = async (req: Request, res: Response) => {
-//   try {
-//     const { email, name, verificationToken } = req.body;
-
-//     // -----------------------------
-//     // 1. Validate required fields
-//     // -----------------------------
-
-//     if (!email || !name || !verificationToken) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "Name, email, and verification token are required.",
-//       });
-//     }
-
-//     // -----------------------------
-//     // 2. Normalize email
-//     // -----------------------------
-
-//     const normalizedEmail = email.toLowerCase().trim();
-
-//     // -----------------------------
-//     // 3. Validate email
-//     // -----------------------------
-
-//     if (!validator.isEmail(normalizedEmail)) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "Please enter a valid email address.",
-//       });
-//     }
-
-//     // -----------------------------
-//     // 4. Verify old verification token
-//     // -----------------------------
-
-//     let oldTokenPayload: jwt.JwtPayload;
-
-//     try {
-//       const decoded = jwt.verify(verificationToken, JWT_SECRET);
-
-//       if (typeof decoded === "string") {
-//         return res.status(400).json({
-//           success: false,
-//           message: "Invalid verification token.",
-//         });
-//       }
-
-//       oldTokenPayload = decoded;
-//     } catch {
-//       return res.status(400).json({
-//         success: false,
-//         message:
-//           "Verification session has expired. Please request verification again.",
-//       });
-//     }
-
-//     // -----------------------------
-//     // 5. Check token purpose
-//     // -----------------------------
-
-//     if (oldTokenPayload.purpose !== "email_otp") {
-//       return res.status(400).json({
-//         success: false,
-//         message: "Invalid email verification session.",
-//       });
-//     }
-
-//     // -----------------------------
-//     // 6. Make sure email matches
-//     // -----------------------------
-
-//     if (oldTokenPayload.target !== normalizedEmail) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "This verification session does not belong to this email.",
-//       });
-//     }
-
-//     // -----------------------------
-//     // 7. Check whether email
-//     //    is already registered
-//     // -----------------------------
-
-//     const emailExists = await userModel.findOne({
-//       email: normalizedEmail,
-//     });
-
-//     if (emailExists) {
-//       return res.status(409).json({
-//         success: false,
-//         message: "Email already registered.",
-//       });
-//     }
-
-//     // -----------------------------
-//     // 8. Generate new OTP
-//     // -----------------------------
-
-//     const otp = crypto.randomInt(100000, 1000000).toString();
-
-//     // -----------------------------
-//     // 9. Hash new OTP
-//     // -----------------------------
-
-//     const otpHash = crypto
-//       .createHmac("sha256", JWT_SECRET)
-//       .update(otp)
-//       .digest("hex");
-
-//     // -----------------------------
-//     // 10. Create new verification token
-//     // -----------------------------
-
-//     const newVerificationToken = jwt.sign(
-//       {
-//         purpose: "email_otp",
-//         target: normalizedEmail,
-//         otpHash,
-//       },
-//       JWT_SECRET,
-//       {
-//         expiresIn: "10m",
-//       },
-//     );
-
-//     // -----------------------------
-//     // 11. Send new OTP
-//     // -----------------------------
-
-//     try {
-//       await sendVerificationEmail(normalizedEmail, name.trim(), otp);
-//     } catch (emailError) {
-//       console.error("Resend email OTP error:", emailError);
-
-//       return res.status(500).json({
-//         success: false,
-//         message: "Unable to send verification email. Please try again.",
-//       });
-//     }
-
-//     // -----------------------------
-//     // 12. Return new token
-//     // -----------------------------
-
-//     return res.status(200).json({
-//       success: true,
-//       message: "A new verification OTP has been sent.",
-//       verificationToken: newVerificationToken,
-//     });
-//   } catch (error) {
-//     console.error("Resend email OTP error:", error);
-
-//     return res.status(500).json({
-//       success: false,
-//       message: "Internal server error.",
-//     });
-//   }
-// };
+export const sendEmailOTP = async (req: Request, res: Response) => {
+  try {
+    const { email, name } = req.body;
+
+    // -----------------------------
+    // 1. Validate required fields
+    // -----------------------------
+
+    if (!email || !name) {
+      return res.status(400).json({
+        success: false,
+        message: "Name and email are required.",
+      });
+    }
+
+    // -----------------------------
+    // 2. Normalize email
+    // -----------------------------
+
+    const normalizedEmail = email.toLowerCase().trim();
+
+    // -----------------------------
+    // 3. Validate email
+    // -----------------------------
+
+    if (!validator.isEmail(normalizedEmail)) {
+      return res.status(400).json({
+        success: false,
+        message: "Please enter a valid email address.",
+      });
+    }
+
+    // -----------------------------
+    // 4. Check if email already
+    //    belongs to a registered user
+    // -----------------------------
+
+    const emailExists = await userModel.findOne({
+      email: normalizedEmail,
+    });
+
+    if (emailExists) {
+      return res.status(409).json({
+        success: false,
+        message: "Email already registered.",
+      });
+    }
+
+    // -----------------------------
+    // 5. Generate 6-digit OTP
+    // -----------------------------
+
+    const otp = crypto.randomInt(100000, 1000000).toString();
+
+    // -----------------------------
+    // 6. Hash OTP
+    // -----------------------------
+
+    const otpHash = crypto
+      .createHmac("sha256", JWT_SECRET)
+      .update(otp)
+      .digest("hex");
+
+    // -----------------------------
+    // 7. Create temporary
+    //    verification token
+    // -----------------------------
+
+    const verificationToken = jwt.sign(
+      {
+        purpose: "email_otp",
+        target: normalizedEmail,
+        otpHash,
+      },
+      JWT_SECRET,
+      {
+        expiresIn: "10m",
+      },
+    );
+
+    // -----------------------------
+    // 8. Send OTP email
+    // -----------------------------
+
+    try {
+      await sendVerificationEmail(normalizedEmail, name.trim(), otp);
+    } catch (emailError) {
+      console.error("Email OTP sending error:", emailError);
+
+      return res.status(500).json({
+        success: false,
+        message: "Unable to send verification email. Please try again.",
+      });
+    }
+
+    // -----------------------------
+    // 9. Return temporary token
+    // -----------------------------
+
+    return res.status(200).json({
+      success: true,
+      message: "Verification OTP sent to your email.",
+      verificationToken,
+    });
+  } catch (error) {
+    console.error("Send email OTP error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error.",
+    });
+  }
+};
+
+export const verifyEmailOTP = async (req: Request, res: Response) => {
+  try {
+    const { email, otp, verificationToken } = req.body;
+
+    // -----------------------------
+    // 1. Validate required fields
+    // -----------------------------
+
+    if (!email || !otp || !verificationToken) {
+      return res.status(400).json({
+        success: false,
+        message: "Email, OTP, and verification token are required.",
+      });
+    }
+
+    // -----------------------------
+    // 2. Normalize email
+    // -----------------------------
+
+    const normalizedEmail = email.toLowerCase().trim();
+
+    // -----------------------------
+    // 3. Validate email
+    // -----------------------------
+
+    if (!validator.isEmail(normalizedEmail)) {
+      return res.status(400).json({
+        success: false,
+        message: "Please enter a valid email address.",
+      });
+    }
+
+    // -----------------------------
+    // 4. Validate OTP
+    // -----------------------------
+
+    if (!/^\d{6}$/.test(otp)) {
+      return res.status(400).json({
+        success: false,
+        message: "OTP must be a 6-digit number.",
+      });
+    }
+
+    // -----------------------------
+    // 5. Verify temporary OTP token
+    // -----------------------------
+
+    let otpPayload: jwt.JwtPayload;
+
+    try {
+      const decoded = jwt.verify(verificationToken, JWT_SECRET);
+
+      if (typeof decoded === "string") {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid verification token.",
+        });
+      }
+
+      otpPayload = decoded;
+    } catch {
+      return res.status(400).json({
+        success: false,
+        message: "Verification session has expired. Please request a new OTP.",
+      });
+    }
+
+    // -----------------------------
+    // 6. Check token purpose
+    // -----------------------------
+
+    if (otpPayload.purpose !== "email_otp") {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid email verification token.",
+      });
+    }
+
+    // -----------------------------
+    // 7. Check email matches token
+    // -----------------------------
+
+    if (otpPayload.target !== normalizedEmail) {
+      return res.status(400).json({
+        success: false,
+        message: "This verification code does not belong to this email.",
+      });
+    }
+
+    // -----------------------------
+    // 8. Check OTP hash exists
+    // -----------------------------
+
+    if (typeof otpPayload.otpHash !== "string" || !otpPayload.otpHash) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid verification session.",
+      });
+    }
+
+    // -----------------------------
+    // 9. Hash entered OTP
+    // -----------------------------
+
+    const enteredOTPHash = crypto
+      .createHmac("sha256", JWT_SECRET)
+      .update(otp)
+      .digest("hex");
+
+    // -----------------------------
+    // 10. Compare OTP
+    // -----------------------------
+
+    const isOTPValid = crypto.timingSafeEqual(
+      Buffer.from(enteredOTPHash, "hex"),
+      Buffer.from(otpPayload.otpHash, "hex"),
+    );
+
+    if (!isOTPValid) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid OTP.",
+      });
+    }
+
+    // -----------------------------
+    // 11. Create verified proof token
+    // -----------------------------
+
+    const verifiedToken = jwt.sign(
+      {
+        purpose: "email_verified",
+        target: normalizedEmail,
+      },
+      JWT_SECRET,
+      {
+        expiresIn: "15m",
+      },
+    );
+
+    // -----------------------------
+    // 12. Success
+    // -----------------------------
+
+    return res.status(200).json({
+      success: true,
+      message: "Email verified successfully.",
+      verifiedToken,
+    });
+  } catch (error) {
+    console.error("Email OTP verification error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error.",
+    });
+  }
+};
+
+export const resendEmailOTP = async (req: Request, res: Response) => {
+  try {
+    const { email, name, verificationToken } = req.body;
+
+    // -----------------------------
+    // 1. Validate required fields
+    // -----------------------------
+
+    if (!email || !name || !verificationToken) {
+      return res.status(400).json({
+        success: false,
+        message: "Name, email, and verification token are required.",
+      });
+    }
+
+    // -----------------------------
+    // 2. Normalize email
+    // -----------------------------
+
+    const normalizedEmail = email.toLowerCase().trim();
+
+    // -----------------------------
+    // 3. Validate email
+    // -----------------------------
+
+    if (!validator.isEmail(normalizedEmail)) {
+      return res.status(400).json({
+        success: false,
+        message: "Please enter a valid email address.",
+      });
+    }
+
+    // -----------------------------
+    // 4. Verify old verification token
+    // -----------------------------
+
+    let oldTokenPayload: jwt.JwtPayload;
+
+    try {
+      const decoded = jwt.verify(verificationToken, JWT_SECRET);
+
+      if (typeof decoded === "string") {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid verification token.",
+        });
+      }
+
+      oldTokenPayload = decoded;
+    } catch {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Verification session has expired. Please request verification again.",
+      });
+    }
+
+    // -----------------------------
+    // 5. Check token purpose
+    // -----------------------------
+
+    if (oldTokenPayload.purpose !== "email_otp") {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid email verification session.",
+      });
+    }
+
+    // -----------------------------
+    // 6. Make sure email matches
+    // -----------------------------
+
+    if (oldTokenPayload.target !== normalizedEmail) {
+      return res.status(400).json({
+        success: false,
+        message: "This verification session does not belong to this email.",
+      });
+    }
+
+    // -----------------------------
+    // 7. Check whether email
+    //    is already registered
+    // -----------------------------
+
+    const emailExists = await userModel.findOne({
+      email: normalizedEmail,
+    });
+
+    if (emailExists) {
+      return res.status(409).json({
+        success: false,
+        message: "Email already registered.",
+      });
+    }
+
+    // -----------------------------
+    // 8. Generate new OTP
+    // -----------------------------
+
+    const otp = crypto.randomInt(100000, 1000000).toString();
+
+    // -----------------------------
+    // 9. Hash new OTP
+    // -----------------------------
+
+    const otpHash = crypto
+      .createHmac("sha256", JWT_SECRET)
+      .update(otp)
+      .digest("hex");
+
+    // -----------------------------
+    // 10. Create new verification token
+    // -----------------------------
+
+    const newVerificationToken = jwt.sign(
+      {
+        purpose: "email_otp",
+        target: normalizedEmail,
+        otpHash,
+      },
+      JWT_SECRET,
+      {
+        expiresIn: "10m",
+      },
+    );
+
+    // -----------------------------
+    // 11. Send new OTP
+    // -----------------------------
+
+    try {
+      await sendVerificationEmail(normalizedEmail, name.trim(), otp);
+    } catch (emailError) {
+      console.error("Resend email OTP error:", emailError);
+
+      return res.status(500).json({
+        success: false,
+        message: "Unable to send verification email. Please try again.",
+      });
+    }
+
+    // -----------------------------
+    // 12. Return new token
+    // -----------------------------
+
+    return res.status(200).json({
+      success: true,
+      message: "A new verification OTP has been sent.",
+      verificationToken: newVerificationToken,
+    });
+  } catch (error) {
+    console.error("Resend email OTP error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error.",
+    });
+  }
+};
 
 // export const sendWhatsAppOTP = async (req: Request, res: Response) => {
 //   try {
@@ -861,7 +861,7 @@ export const userRegistration = async (req: Request, res: Response) => {
       // number,
       email,
       password,
-      // emailVerificationToken,
+      emailVerificationToken,
       // whatsappVerificationToken,
     } = req.body;
 
@@ -878,7 +878,8 @@ export const userRegistration = async (req: Request, res: Response) => {
       // !whatsappVerificationToken
       !name ||
       !email ||
-      !password
+      !password ||
+      !emailVerificationToken
     ) {
       return res.status(400).json({
         success: false,
@@ -941,30 +942,30 @@ export const userRegistration = async (req: Request, res: Response) => {
     // 6. Verify email verification proof
     // -----------------------------
 
-    // let emailVerificationPayload: any;
+    let emailVerificationPayload: any;
 
-    // try {
-    //   emailVerificationPayload = jwt.verify(
-    //     emailVerificationToken,
-    //     process.env.JWT_SECRET as string,
-    //   );
-    // } catch {
-    //   return res.status(400).json({
-    //     success: false,
-    //     message:
-    //       "Email verification has expired or is invalid. Please verify your email again.",
-    //   });
-    // }
+    try {
+      emailVerificationPayload = jwt.verify(
+        emailVerificationToken,
+        process.env.JWT_SECRET as string,
+      );
+    } catch {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Email verification has expired or is invalid. Please verify your email again.",
+      });
+    }
 
-    // if (
-    //   emailVerificationPayload.purpose !== "email_verified" ||
-    //   emailVerificationPayload.target !== normalizedEmail
-    // ) {
-    //   return res.status(400).json({
-    //     success: false,
-    //     message: "Invalid email verification.",
-    //   });
-    // }
+    if (
+      emailVerificationPayload.purpose !== "email_verified" ||
+      emailVerificationPayload.target !== normalizedEmail
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid email verification.",
+      });
+    }
 
     // -----------------------------
     // 7. Verify WhatsApp verification proof

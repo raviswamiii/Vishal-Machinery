@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-// import { VerificationPopup } from "./VerificationPopup";
+import { VerificationPopup } from "./VerificationPopup";
 import axios from "axios";
 import { useUserContext } from "../context/userContext";
 import {
@@ -12,7 +12,7 @@ import {
   // Phone,
   LogIn,
   ArrowLeft,
-  // CheckCircle,
+  CheckCircle,
   ShieldCheck,
 } from "lucide-react";
 
@@ -22,18 +22,18 @@ export const Registration = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // const [isEmailVerified, setIsEmailVerified] = useState(false);
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
   // const [isWhatsappVerified, setIsWhatsappVerified] = useState(false);
 
-  // const [emailVerificationToken, setEmailVerificationToken] = useState("");
+  const [emailVerificationToken, setEmailVerificationToken] = useState("");
   // const [whatsappVerificationToken, setWhatsappVerificationToken] =
   //   useState("");
 
-  // const [verificationType, setVerificationType] = useState<
-  //   "email" | "whatsapp" | null
-  // >(null);
+  const [verificationType, setVerificationType] = useState<
+    "email" | "whatsapp" | null
+  >(null);
 
-  // const [verificationToken, setVerificationToken] = useState("");
+  const [verificationToken, setVerificationToken] = useState("");
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -44,16 +44,16 @@ export const Registration = () => {
   const navigate = useNavigate();
   const { setToken } = useUserContext();
 
-  // const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setEmail(e.target.value);
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
 
-  //   // Changing email means previous verification is no longer valid
-  //   setIsEmailVerified(false);
+    // Changing email means previous verification is no longer valid
+    setIsEmailVerified(false);
 
-  //   setEmailVerificationToken("");
+    setEmailVerificationToken("");
 
-  //   setError("");
-  // };
+    setError("");
+  };
 
   // const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   //   // Only allow numbers
@@ -69,42 +69,42 @@ export const Registration = () => {
   //   setError("");
   // };
 
-  // const handleVerifyEmail = async () => {
-  //   setError("");
+  const handleVerifyEmail = async () => {
+    setError("");
 
-  //   if (!name.trim()) {
-  //     setError("Please enter your name first.");
-  //     return;
-  //   }
+    if (!name.trim()) {
+      setError("Please enter your name first.");
+      return;
+    }
 
-  //   if (!email.trim()) {
-  //     setError("Please enter your email address first.");
-  //     return;
-  //   }
+    if (!email.trim()) {
+      setError("Please enter your email address first.");
+      return;
+    }
 
-  //   try {
-  //     setLoading(true);
+    try {
+      setLoading(true);
 
-  //     const response = await axios.post(
-  //       `${backendURL}/api/users/send-email-otp`,
-  //       { name: name.trim(), email: email.trim() },
-  //     );
+      const response = await axios.post(
+        `${backendURL}/api/users/send-email-otp`,
+        { name: name.trim(), email: email.trim() },
+      );
 
-  //     if (response.data?.success) {
-  //       setVerificationToken(response.data.verificationToken);
-  //       setVerificationType("email");
-  //     } else {
-  //       setError(response.data?.message || "Failed to send email OTP.");
-  //     }
-  //   } catch (error: any) {
-  //     setError(
-  //       error.response?.data?.message ||
-  //         "Unable to send verification code to email.",
-  //     );
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+      if (response.data?.success) {
+        setVerificationToken(response.data.verificationToken);
+        setVerificationType("email");
+      } else {
+        setError(response.data?.message || "Failed to send email OTP.");
+      }
+    } catch (error: any) {
+      setError(
+        error.response?.data?.message ||
+          "Unable to send verification code to email.",
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // const handleVerifyWhatsapp = async () => {
   //   setError("");
@@ -152,10 +152,10 @@ export const Registration = () => {
     //   return;
     // }
 
-    // if (!isEmailVerified) {
-    //   setError("Please verify your email address before continuing.");
-    //   return;
-    // }
+    if (!isEmailVerified) {
+      setError("Please verify your email address before continuing.");
+      return;
+    }
 
     // // Check WhatsApp verification
     // if (!isWhatsappVerified) {
@@ -163,10 +163,10 @@ export const Registration = () => {
     //   return;
     // }
 
-    // if (!emailVerificationToken || !whatsappVerificationToken) {
-    //   setError("Verification is incomplete. Please verify again.");
-    //   return;
-    // }
+    if (!emailVerificationToken) {
+      setError("Verification is incomplete. Please verify again.");
+      return;
+    }
 
     setLoading(true);
 
@@ -181,7 +181,7 @@ export const Registration = () => {
         // number: number.trim(),
         email: email.trim(),
         password,
-        // emailVerificationToken,
+        emailVerificationToken,
         // whatsappVerificationToken,
       });
 
@@ -302,16 +302,16 @@ export const Registration = () => {
                     type="email"
                     placeholder="Enter your email"
                     value={email}
-                    // onChange={handleEmailChange}
-                    onChange={(e) => {
-                      setEmail(e.target.value);
-                      setError("");
-                    }}
+                    onChange={handleEmailChange}
+                    // onChange={(e) => {
+                    //   setEmail(e.target.value);
+                    //   setError("");
+                    // }}
                     className="w-full bg-transparent outline-none text-white text-sm placeholder:text-gray-600"
                   />
                 </div>
 
-                {/* {isEmailVerified ? (
+                {isEmailVerified ? (
                   <div className="h-10 px-3 flex items-center gap-1 text-green-500 text-sm font-semibold">
                     <CheckCircle size={18} />
                     Verified
@@ -325,7 +325,7 @@ export const Registration = () => {
                   >
                     Verify
                   </button>
-                )} */}
+                )}
               </div>
             </div>
 
@@ -388,10 +388,11 @@ export const Registration = () => {
           </div>
         </div>
 
-        {/* {verificationType && (
+         {verificationType && (
           <VerificationPopup
             type={verificationType}
-            value={verificationType === "email" ? email : number}
+            // value={verificationType === "email" ? email : number}
+            value={email}
             name={name}
             verificationToken={verificationToken}
             onClose={() => {
@@ -402,10 +403,10 @@ export const Registration = () => {
               if (verificationType === "email") {
                 setIsEmailVerified(true);
                 setEmailVerificationToken(verifiedToken);
-              } else {
-                setIsWhatsappVerified(true);
-                setWhatsappVerificationToken(verifiedToken);
-              }
+              } // else {
+              //   setIsWhatsappVerified(true);
+              //   setWhatsappVerificationToken(verifiedToken);
+              // }
               setVerificationType(null);
               setVerificationToken("");
             }}
@@ -413,7 +414,7 @@ export const Registration = () => {
               setVerificationToken(newToken);
             }}
           />
-        )} */}
+        )}
       </div>
     </div>
   );
